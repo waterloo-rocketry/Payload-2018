@@ -1,4 +1,4 @@
-update=2018-03-03 8:01:29 PM
+update=2018-03-05 8:52:48 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,6 +25,16 @@ version=1
 NetIExt=net
 [general]
 version=1
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
 [eeschema]
 version=1
 LibDir=
@@ -67,13 +77,10 @@ LibName35=fgpmmopa6h
 LibName36=sot-223
 LibName37=C:/Users/paula/OneDrive/Documents/Placeholders
 LibName38=Recovery Board Parts
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
+LibName39=libs/Schematic parts/a2135-h
+LibName40=libs/Schematic parts/ap2204k-5
+LibName41=libs/Schematic parts/arduino_nano
+LibName42=libs/Schematic parts/fgpmmopa6h
+LibName43=libs/Schematic parts/Recovery Board Parts
+LibName44=libs/Schematic parts/Recovery Board-cache
+LibName45=libs/Schematic parts/sot-223
