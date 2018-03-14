@@ -140,9 +140,9 @@ F 3 "" H 6100 1100 60  0001 C CNN
 	1    6050 1100
 	1    0    0    -1  
 $EndComp
-Text GLabel 6700 1300 2    60   Input Italic 0
-Stratologger_Switch-
 Text GLabel 6700 900  2    60   Input Italic 0
+Stratologger_Switch-
+Text GLabel 6700 1300 2    60   Input Italic 0
 Stratologger_Switch+
 Text GLabel 2600 3700 2    60   Input ~ 0
 7.4V

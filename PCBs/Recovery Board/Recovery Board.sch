@@ -31,13 +31,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:Placeholders
 LIBS:a2135-h
+LIBS:ap2204k-5
 LIBS:arduino_nano
 LIBS:fgpmmopa6h
-LIBS:sot-223
-LIBS:Placeholders
 LIBS:Recovery Board Parts
 LIBS:Recovery Board-cache
+LIBS:sot-223
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268

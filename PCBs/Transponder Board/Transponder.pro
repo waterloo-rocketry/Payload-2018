@@ -1,4 +1,4 @@
-update=2018-03-13 9:22:18 PM
+update=2018-03-13 8:47:24 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,16 +25,6 @@ version=1
 NetIExt=net
 [general]
 version=1
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
 [eeschema]
 version=1
 LibDir=
@@ -71,23 +61,11 @@ LibName29=opto
 LibName30=atmel
 LibName31=contrib
 LibName32=valves
-LibName33=a2135-h
-LibName34=arduino_nano
-LibName35=fgpmmopa6h
-LibName36=sot-223
-LibName37=C:/Users/paula/OneDrive/Documents/Placeholders
-LibName38=Recovery Board Parts
-LibName39=libs/Schematic parts/a2135-h
-LibName40=libs/Schematic parts/ap2204k-5
-LibName41=libs/Schematic parts/arduino_nano
-LibName42=libs/Schematic parts/fgpmmopa6h
-LibName43=libs/Schematic parts/Recovery Board Parts
-LibName44=libs/Schematic parts/Recovery Board-cache
-LibName45=libs/Schematic parts/sot-223
-LibName46=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/a2135-h
-LibName47=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/ap2204k-5
-LibName48=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/arduino_nano
-LibName49=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/fgpmmopa6h
-LibName50=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board Parts
-LibName51=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board-cache
-LibName52=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/sot-223
+LibName33=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/a2135-h
+LibName34=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/ap2204k-5
+LibName35=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/arduino_nano
+LibName36=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/fgpmmopa6h
+LibName37=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board Parts
+LibName38=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board-cache
+LibName39=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/sot-223
+LibName40=D:/Rocketry/Payload Repo/PCBs/Instrumentation Board/instrumentation_board_parts
