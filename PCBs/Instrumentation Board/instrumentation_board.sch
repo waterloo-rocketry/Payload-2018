@@ -37,7 +37,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 8
+Sheet 1 4
 Title ""
 Date ""
 Rev ""
@@ -301,9 +301,9 @@ F 3 "" H 7750 1850 50  0001 C CNN
 	1    7750 1850
 	1    0    0    -1  
 $EndComp
-Text GLabel 2800 4700 2    60   Input ~ 0
+Text GLabel 3350 4700 2    60   Input ~ 0
 INT0
-Text GLabel 2800 4800 2    60   Input ~ 0
+Text GLabel 2950 4800 2    60   Input ~ 0
 INT1
 Text GLabel 7750 1350 0    60   Input ~ 0
 INT0
@@ -417,70 +417,12 @@ NoConn ~ 1450 5250
 NoConn ~ 1450 5100
 Text GLabel 9450 5700 2    60   Input ~ 0
 5V
-$Sheet
-S 5650 4350 500  350 
-U 5AAB3C6A
-F0 "Shifter" 60
-F1 "bidirectionalshifter.sch" 60
-F2 "LV" I L 5650 4450 60 
-F3 "LV1" I L 5650 4600 60 
-F4 "HV" I R 6150 4450 60 
-F5 "HV1" I R 6150 4600 60 
-$EndSheet
-Text GLabel 6150 4450 2    60   Input ~ 0
-5V
-$Sheet
-S 4750 4600 500  350 
-U 5AB1B260
-F0 "Shifter" 60
-F1 "bidirectionalshifter.sch" 60
-F2 "LV" I L 4750 4700 60 
-F3 "LV1" I L 4750 4850 60 
-F4 "HV" I R 5250 4700 60 
-F5 "HV1" I R 5250 4850 60 
-$EndSheet
-Text GLabel 6150 4600 2    60   Input ~ 0
-SDA_5V
 Text GLabel 3400 6300 2    60   Input ~ 0
 SDA_5V
 Text GLabel 7050 1150 0    60   Input ~ 0
 1.8V
 Text GLabel 7000 2400 0    60   Input ~ 0
 1.8V
-Text GLabel 4750 4700 0    60   Input ~ 0
-1.8V
-Text GLabel 4750 4850 0    60   Input ~ 0
-SDA_1.8V
-$Sheet
-S 5750 5650 500  350 
-U 5AB1E360
-F0 "Shifter" 60
-F1 "bidirectionalshifter.sch" 60
-F2 "LV" I L 5750 5900 60 
-F3 "LV1" I L 5750 5750 60 
-F4 "HV" I R 6250 5900 60 
-F5 "HV1" I R 6250 5750 60 
-$EndSheet
-Text GLabel 6250 5750 2    60   Input ~ 0
-5V
-$Sheet
-S 4850 5900 500  350 
-U 5AB1E367
-F0 "Shifter" 60
-F1 "bidirectionalshifter.sch" 60
-F2 "LV" I L 4850 6000 60 
-F3 "LV1" I L 4850 6150 60 
-F4 "HV" I R 5350 6000 60 
-F5 "HV1" I R 5350 6150 60 
-$EndSheet
-Text GLabel 5750 5750 0    60   Input ~ 0
-3V
-Text GLabel 6250 5900 2    60   Input ~ 0
-SCL_5V
-Text GLabel 4850 6000 0    60   Input ~ 0
-1.8V
-Text GLabel 4850 6150 0    60   Input ~ 0
-SCL_1.8V
 Text GLabel 9000 1650 2    60   Input ~ 0
 SDA_1.8V
 Text GLabel 9000 1550 2    60   Input ~ 0
@@ -491,18 +433,8 @@ Text GLabel 9000 2900 2    60   Input ~ 0
 SCL_1.8V
 Text GLabel 3400 6400 2    60   Input ~ 0
 SCL_5V
-Text GLabel 5650 4450 0    60   Input ~ 0
-3V
-Text GLabel 5250 4700 2    60   Input ~ 0
-3V
-Text GLabel 5350 6000 2    60   Input ~ 0
-3V
 Text GLabel 7300 3750 0    60   Input ~ 0
 3V
-Text GLabel 5650 4850 2    60   Input ~ 0
-SDA_3V
-Text GLabel 5750 6150 2    60   Input ~ 0
-SCL_3V
 Text GLabel 8900 3950 2    60   Input ~ 0
 SDA_3V
 Text GLabel 8900 4050 2    60   Input ~ 0
@@ -522,31 +454,159 @@ F 3 "" H 6950 5700 50  0001 C CNN
 	1    6950 5700
 	1    0    0    -1  
 $EndComp
+$Sheet
+S 1750 2750 750  350 
+U 5AB2E5F3
+F0 "7.4To3V" 60
+F1 "file5AB2E5F2.sch" 60
+F2 "7.4V" I L 1750 2950 60 
+F3 "3V" I R 2500 2950 60 
+$EndSheet
+$Sheet
+S 1750 3700 800  350 
+U 5AB2F70C
+F0 "7.4To1.8V" 60
+F1 "file5AB2F70B.sch" 60
+F2 "1.8V" I R 2550 3900 60 
+F3 "7.4V" I L 1750 3900 60 
+$EndSheet
+Text GLabel 1750 3900 0    60   Input ~ 0
+7.4V
+Text GLabel 1750 2950 0    60   Input ~ 0
+7.4V
+Text GLabel 2500 2950 2    60   Input ~ 0
+3V
+Text GLabel 2550 3900 2    60   Input ~ 0
+1.8V
+$Sheet
+S 8950 5600 500  350 
+U 5AB3476E
+F0 "Shifter" 60
+F1 "bidirectionalshifter.sch" 60
+F2 "LV" I L 8950 5700 60 
+F3 "LV1" I L 8950 5850 60 
+F4 "HV" I R 9450 5700 60 
+F5 "HV1" I R 9450 5850 60 
+$EndSheet
+$Comp
+L R R2
+U 1 1 5AB373FD
+P 3350 6150
+F 0 "R2" V 3430 6150 50  0000 C CNN
+F 1 "10K" V 3350 6150 50  0000 C CNN
+F 2 "" V 3280 6150 50  0001 C CNN
+F 3 "" H 3350 6150 50  0001 C CNN
+	1    3350 6150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R3
+U 1 1 5AB3750A
+P 3350 6550
+F 0 "R3" V 3430 6550 50  0000 C CNN
+F 1 "10K" V 3350 6550 50  0000 C CNN
+F 2 "" V 3280 6550 50  0001 C CNN
+F 3 "" H 3350 6550 50  0001 C CNN
+	1    3350 6550
+	1    0    0    -1  
+$EndComp
+Text GLabel 3350 6000 1    60   Input ~ 0
+5V
+Text GLabel 3350 6700 3    60   Input ~ 0
+5V
+$Comp
+L GND #PWR?
+U 1 1 5AB3D6CF
+P 5050 2400
+F 0 "#PWR?" H 5050 2150 50  0001 C CNN
+F 1 "GND" H 5050 2250 50  0000 C CNN
+F 2 "" H 5050 2400 50  0001 C CNN
+F 3 "" H 5050 2400 50  0001 C CNN
+	1    5050 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R4
+U 1 1 5AB3D7FB
+P 5050 2250
+F 0 "R4" V 5130 2250 50  0000 C CNN
+F 1 "10K" V 5050 2250 50  0000 C CNN
+F 2 "" V 4980 2250 50  0001 C CNN
+F 3 "" H 5050 2250 50  0001 C CNN
+	1    5050 2250
+	1    0    0    -1  
+$EndComp
+Text GLabel 4700 2100 0    60   Input ~ 0
+SIG
+Text GLabel 2800 5900 2    60   Input ~ 0
+SIG
+Text GLabel 5600 2100 2    60   Input ~ 0
+5V
+$Comp
+L Q_Photo_NPN Q1
+U 1 1 5AB429C0
+P 5400 2000
+F 0 "Q1" H 5600 2050 50  0000 L CNN
+F 1 "Q_Photo_NPN" H 5600 1950 50  0000 L CNN
+F 2 "" H 5600 2100 50  0001 C CNN
+F 3 "" H 5400 2000 50  0001 C CNN
+	1    5400 2000
+	0    1    1    0   
+$EndComp
+$Comp
+L PI4ULS5V201TAEX U?
+U 1 1 5AB5D648
+P 5850 3750
+F 0 "U?" H 5850 4300 60  0000 C CNN
+F 1 "PI4ULS5V201TAEX" H 5850 3700 60  0000 C CNN
+F 2 "" H 5850 3750 60  0001 C CNN
+F 3 "" H 5850 3750 60  0001 C CNN
+	1    5850 3750
+	1    0    0    -1  
+$EndComp
+Text GLabel 6300 3600 2    60   Input ~ 0
+5V
+Text GLabel 6300 3400 2    60   Input ~ 0
+SDA_5V
+Text GLabel 5400 3500 0    60   Input ~ 0
+3V
+Text GLabel 5150 3300 1    60   Input ~ 0
+SDA_3V
+Text GLabel 6300 3700 2    60   Input ~ 0
+5V
+$Comp
+L GND #PWR?
+U 1 1 5AB674F2
+P 5350 3800
+F 0 "#PWR?" H 5350 3550 50  0001 C CNN
+F 1 "GND" H 5350 3650 50  0000 C CNN
+F 2 "" H 5350 3800 50  0001 C CNN
+F 3 "" H 5350 3800 50  0001 C CNN
+	1    5350 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L PI4ULS5V201TAEX U?
+U 1 1 5AB67DF3
+P 4500 3750
+F 0 "U?" H 4500 4300 60  0000 C CNN
+F 1 "PI4ULS5V201TAEX" H 4500 3700 60  0000 C CNN
+F 2 "" H 4500 3750 60  0001 C CNN
+F 3 "" H 4500 3750 60  0001 C CNN
+	1    4500 3750
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	7150 5850 6950 5850
 Connection ~ 7150 5500
 Wire Wire Line
 	6950 5550 6950 5500
-Connection ~ 5550 4850
-Connection ~ 5650 6150
 Connection ~ 7700 3750
 Wire Wire Line
 	7700 3750 7700 3850
 Wire Wire Line
 	7700 3850 7850 3850
 Connection ~ 7400 3750
-Wire Wire Line
-	5350 6150 5750 6150
-Wire Wire Line
-	5650 5900 5650 6150
-Wire Wire Line
-	5750 5900 5650 5900
-Wire Wire Line
-	5250 4850 5650 4850
-Wire Wire Line
-	5550 4600 5550 4850
-Wire Wire Line
-	5650 4600 5550 4600
 Wire Wire Line
 	7150 5500 7150 5750
 Wire Wire Line
@@ -635,40 +695,6 @@ Wire Wire Line
 	2350 1850 2350 2000
 Wire Wire Line
 	2200 1850 2350 1850
-$Sheet
-S 1750 2750 750  350 
-U 5AB2E5F3
-F0 "7.4To3V" 60
-F1 "file5AB2E5F2.sch" 60
-F2 "7.4V" I L 1750 2950 60 
-F3 "3V" I R 2500 2950 60 
-$EndSheet
-$Sheet
-S 1750 3700 800  350 
-U 5AB2F70C
-F0 "7.4To1.8V" 60
-F1 "file5AB2F70B.sch" 60
-F2 "1.8V" I R 2550 3900 60 
-F3 "7.4V" I L 1750 3900 60 
-$EndSheet
-Text GLabel 1750 3900 0    60   Input ~ 0
-7.4V
-Text GLabel 1750 2950 0    60   Input ~ 0
-7.4V
-Text GLabel 2500 2950 2    60   Input ~ 0
-3V
-Text GLabel 2550 3900 2    60   Input ~ 0
-1.8V
-$Sheet
-S 8950 5600 500  350 
-U 5AB3476E
-F0 "Shifter" 60
-F1 "bidirectionalshifter.sch" 60
-F2 "LV" I L 8950 5700 60 
-F3 "LV1" I L 8950 5850 60 
-F4 "HV" I R 9450 5700 60 
-F5 "HV1" I R 9450 5850 60 
-$EndSheet
 Wire Wire Line
 	8150 5850 8950 5850
 Wire Wire Line
@@ -679,72 +705,156 @@ Wire Wire Line
 	2800 6300 3400 6300
 Wire Wire Line
 	2800 6400 3400 6400
+Wire Wire Line
+	4700 2100 5200 2100
+Connection ~ 5050 2100
+Wire Wire Line
+	5350 3800 5350 3700
+Wire Wire Line
+	5350 3700 5400 3700
+Wire Wire Line
+	4950 3400 5400 3400
+Wire Wire Line
+	5150 3400 5150 3300
+Connection ~ 5150 3400
+NoConn ~ 6300 3500
+NoConn ~ 5400 3600
+Text GLabel 4950 3600 2    60   Input ~ 0
+3V
+Text GLabel 4950 3700 2    60   Input ~ 0
+3V
+NoConn ~ 4950 3500
+NoConn ~ 4050 3600
+Text GLabel 4050 3500 0    60   Input ~ 0
+1.8V
+Text GLabel 4050 3400 0    60   Input ~ 0
+SDA_1.8V
 $Comp
-L R R2
-U 1 1 5AB373FD
-P 3350 6150
-F 0 "R2" V 3430 6150 50  0000 C CNN
-F 1 "10K" V 3350 6150 50  0000 C CNN
-F 2 "" V 3280 6150 50  0001 C CNN
-F 3 "" H 3350 6150 50  0001 C CNN
-	1    3350 6150
+L PI4ULS5V201TAEX U?
+U 1 1 5AB6A1B5
+P 6100 4950
+F 0 "U?" H 6100 5500 60  0000 C CNN
+F 1 "PI4ULS5V201TAEX" H 6100 4900 60  0000 C CNN
+F 2 "" H 6100 4950 60  0001 C CNN
+F 3 "" H 6100 4950 60  0001 C CNN
+	1    6100 4950
+	1    0    0    -1  
+$EndComp
+Text GLabel 6550 4800 2    60   Input ~ 0
+5V
+Text GLabel 5650 4700 0    60   Input ~ 0
+3V
+Text GLabel 6550 4900 2    60   Input ~ 0
+5V
+$Comp
+L GND #PWR?
+U 1 1 5AB6A1C0
+P 5600 5000
+F 0 "#PWR?" H 5600 4750 50  0001 C CNN
+F 1 "GND" H 5600 4850 50  0000 C CNN
+F 2 "" H 5600 5000 50  0001 C CNN
+F 3 "" H 5600 5000 50  0001 C CNN
+	1    5600 5000
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R3
-U 1 1 5AB3750A
-P 3350 6550
-F 0 "R3" V 3430 6550 50  0000 C CNN
-F 1 "10K" V 3350 6550 50  0000 C CNN
-F 2 "" V 3280 6550 50  0001 C CNN
-F 3 "" H 3350 6550 50  0001 C CNN
-	1    3350 6550
+L PI4ULS5V201TAEX U?
+U 1 1 5AB6A1C6
+P 4750 4950
+F 0 "U?" H 4750 5500 60  0000 C CNN
+F 1 "PI4ULS5V201TAEX" H 4750 4900 60  0000 C CNN
+F 2 "" H 4750 4950 60  0001 C CNN
+F 3 "" H 4750 4950 60  0001 C CNN
+	1    4750 4950
 	1    0    0    -1  
 $EndComp
-Text GLabel 3350 6000 1    60   Input ~ 0
-5V
-Text GLabel 3350 6700 3    60   Input ~ 0
-5V
+Wire Wire Line
+	5600 5000 5600 4900
+Wire Wire Line
+	5600 4900 5650 4900
+Wire Wire Line
+	5200 4600 5650 4600
+Wire Wire Line
+	5400 4600 5400 4500
+Connection ~ 5400 4600
+NoConn ~ 6550 4700
+NoConn ~ 5650 4800
+Text GLabel 5200 4800 2    60   Input ~ 0
+3V
+Text GLabel 5200 4900 2    60   Input ~ 0
+3V
+NoConn ~ 5200 4700
+NoConn ~ 4300 4800
+Text GLabel 4300 4700 0    60   Input ~ 0
+1.8V
 $Comp
-L TEMT6000 U8
-U 1 1 5AB3CE3D
-P 5450 1500
-F 0 "U8" H 5450 2100 60  0000 C CNN
-F 1 "TEMT6000" H 5450 1150 60  0000 C CNN
-F 2 "" H 5450 1500 60  0001 C CNN
-F 3 "" H 5450 1500 60  0001 C CNN
-	1    5450 1500
+L GND #PWR?
+U 1 1 5AB6A2C1
+P 3950 3800
+F 0 "#PWR?" H 3950 3550 50  0001 C CNN
+F 1 "GND" H 3950 3650 50  0000 C CNN
+F 2 "" H 3950 3800 50  0001 C CNN
+F 3 "" H 3950 3800 50  0001 C CNN
+	1    3950 3800
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR?
-U 1 1 5AB3D6CF
-P 4650 1800
-F 0 "#PWR?" H 4650 1550 50  0001 C CNN
-F 1 "GND" H 4650 1650 50  0000 C CNN
-F 2 "" H 4650 1800 50  0001 C CNN
-F 3 "" H 4650 1800 50  0001 C CNN
-	1    4650 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R4
-U 1 1 5AB3D7FB
-P 4650 1650
-F 0 "R4" V 4730 1650 50  0000 C CNN
-F 1 "10K" V 4650 1650 50  0000 C CNN
-F 2 "" V 4580 1650 50  0001 C CNN
-F 3 "" H 4650 1650 50  0001 C CNN
-	1    4650 1650
+U 1 1 5AB6A36E
+P 4200 5000
+F 0 "#PWR?" H 4200 4750 50  0001 C CNN
+F 1 "GND" H 4200 4850 50  0000 C CNN
+F 2 "" H 4200 5000 50  0001 C CNN
+F 3 "" H 4200 5000 50  0001 C CNN
+	1    4200 5000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4300 1500 4800 1500
-Connection ~ 4650 1500
-Text GLabel 4300 1500 0    60   Input ~ 0
-SIG
-Text GLabel 2800 5900 2    60   Input ~ 0
-SIG
-Text GLabel 6100 1500 2    60   Input ~ 0
-5V
+	3950 3800 3950 3700
+Wire Wire Line
+	3950 3700 4050 3700
+Wire Wire Line
+	4200 5000 4200 4900
+Wire Wire Line
+	4200 4900 4300 4900
+Text GLabel 6550 4600 2    60   Input ~ 0
+SCL_5V
+Text GLabel 5400 4500 1    60   Input ~ 0
+SCL_3V
+Text GLabel 4300 4600 0    60   Input ~ 0
+SCL_1.8V
+Text GLabel 2900 5100 3    60   Input ~ 0
+1.8V
+Text GLabel 3300 5100 3    60   Input ~ 0
+1.8V
+$Comp
+L R R?
+U 1 1 5AB6C1FE
+P 2900 4950
+F 0 "R?" V 2980 4950 50  0000 C CNN
+F 1 "10K" V 2900 4950 50  0000 C CNN
+F 2 "" V 2830 4950 50  0001 C CNN
+F 3 "" H 2900 4950 50  0001 C CNN
+	1    2900 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5AB6C3B1
+P 3300 4950
+F 0 "R?" V 3380 4950 50  0000 C CNN
+F 1 "10K" V 3300 4950 50  0000 C CNN
+F 2 "" V 3230 4950 50  0001 C CNN
+F 3 "" H 3300 4950 50  0001 C CNN
+	1    3300 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 4700 3350 4700
+Wire Wire Line
+	3300 4700 3300 4800
+Connection ~ 3300 4700
+Wire Wire Line
+	2800 4800 2950 4800
+Connection ~ 2900 4800
 $EndSCHEMATC
