@@ -31,6 +31,13 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:a2135-h
+LIBS:ap2204k-5
+LIBS:arduino_nano
+LIBS:fgpmmopa6h
+LIBS:Recovery Board Parts
+LIBS:Recovery Board-cache
+LIBS:sot-223
 LIBS:instrumentation_board_parts
 LIBS:instrumentation_board-cache
 EELAYER 25 0
@@ -110,7 +117,7 @@ $Comp
 L GPS U5
 U 1 1 5A9B54D4
 P 7650 6000
-F 0 "U5" H 7650 6450 60  0000 C CNN
+F 0 "U5" H 7650 6500 60  0000 C CNN
 F 1 "GPS-ADAFRUIT746" H 7650 5750 60  0000 C CNN
 F 2 "" H 7750 5900 60  0001 C CNN
 F 3 "" H 7750 5900 60  0001 C CNN
@@ -120,21 +127,21 @@ $EndComp
 $Comp
 L GND #PWR5
 U 1 1 5A9B5B00
-P 7150 6150
-F 0 "#PWR5" H 7150 5900 50  0001 C CNN
-F 1 "GND" H 7150 6000 50  0000 C CNN
-F 2 "" H 7150 6150 50  0001 C CNN
-F 3 "" H 7150 6150 50  0001 C CNN
-	1    7150 6150
+P 6700 6100
+F 0 "#PWR5" H 6700 5850 50  0001 C CNN
+F 1 "GND" H 6700 5950 50  0000 C CNN
+F 2 "" H 6700 6100 50  0001 C CNN
+F 3 "" H 6700 6100 50  0001 C CNN
+	1    6700 6100
 	1    0    0    -1  
 $EndComp
 Text GLabel 2800 4500 2    60   Input ~ 0
 GPS_IN
 Text GLabel 2800 4600 2    60   Input ~ 0
 GPS_OUT
-Text GLabel 8150 5950 2    60   Input ~ 0
+Text GLabel 7150 6050 0    60   Input ~ 0
 GPS_IN
-Text GLabel 9650 5850 2    60   Input ~ 0
+Text GLabel 9650 6000 2    60   Input ~ 0
 GPS_OUT
 $Comp
 L Conn_01x02 J1
@@ -204,7 +211,7 @@ F 3 "" H 8750 4950 60  0001 C CNN
 $EndComp
 Text GLabel 1450 5000 0    60   Input ~ 0
 5V
-Text GLabel 7150 6050 0    60   Input ~ 0
+Text GLabel 7150 5850 0    60   Input ~ 0
 5V
 Text GLabel 8100 4800 0    60   Input ~ 0
 5V
@@ -393,8 +400,6 @@ NoConn ~ 9000 1350
 NoConn ~ 8100 4900
 NoConn ~ 9100 5100
 NoConn ~ 8150 5750
-NoConn ~ 7150 5950
-NoConn ~ 8150 6050
 NoConn ~ 8900 3750
 NoConn ~ 8900 3850
 NoConn ~ 2800 6600
@@ -573,10 +578,10 @@ S 8950 5750 700  350
 U 5AB8BB45
 F0 "ICShifter" 60
 F1 "Shifter.sch" 60
-F2 "B" I R 9650 5850 60 
-F3 "VccB" I R 9650 6000 60 
-F4 "A" I L 8950 5850 60 
-F5 "VccA" I L 8950 6000 60 
+F2 "B" I R 9650 6000 60 
+F3 "VccB" I R 9650 5850 60 
+F4 "A" I L 8950 6000 60 
+F5 "VccA" I L 8950 5850 60 
 $EndSheet
 $Sheet
 S 4950 5000 700  350 
@@ -640,7 +645,7 @@ F 3 "" H 3250 4800 50  0001 C CNN
 	1    3250 4800
 	0    1    1    0   
 $EndComp
-Text GLabel 9650 6000 2    60   Input ~ 0
+Text GLabel 9650 5850 2    60   Input ~ 0
 5V
 Connection ~ 7700 3750
 Wire Wire Line
@@ -748,15 +753,26 @@ Connection ~ 5400 3500
 Wire Wire Line
 	2800 4800 3100 4800
 Wire Wire Line
-	8150 5850 8950 5850
+	8600 5850 8950 5850
 Wire Wire Line
-	7150 5750 6850 5750
+	8600 5850 8600 6050
 Wire Wire Line
-	6850 5750 6850 6400
+	8600 6050 8150 6050
+NoConn ~ 8150 5950
+NoConn ~ 8150 5850
 Wire Wire Line
-	6850 6400 8750 6400
+	7150 5950 6700 5950
 Wire Wire Line
-	8750 6400 8750 6000
+	6700 5950 6700 6100
 Wire Wire Line
-	8750 6000 8950 6000
+	8950 6000 8850 6000
+Wire Wire Line
+	8850 6000 8850 6350
+Wire Wire Line
+	8850 6350 7000 6350
+Wire Wire Line
+	7000 6350 7000 6150
+Wire Wire Line
+	7000 6150 7150 6150
+NoConn ~ 7150 5750
 $EndSCHEMATC

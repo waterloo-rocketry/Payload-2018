@@ -31,13 +31,20 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:a2135-h
+LIBS:ap2204k-5
+LIBS:arduino_nano
+LIBS:fgpmmopa6h
+LIBS:Recovery Board Parts
+LIBS:Recovery Board-cache
+LIBS:sot-223
 LIBS:instrumentation_board_parts
 LIBS:instrumentation_board-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 10
+Sheet 7 10
 Title ""
 Date ""
 Rev ""
@@ -76,7 +83,7 @@ AR Path="/5AB899C9/5AB8720A" Ref="#PWR30"  Part="1"
 AR Path="/5AB8BB45/5AB8720A" Ref="#PWR33"  Part="1" 
 AR Path="/5AB8D505/5AB8720A" Ref="#PWR36"  Part="1" 
 AR Path="/5AB8DDC4/5AB8720A" Ref="#PWR39"  Part="1" 
-F 0 "#PWR39" H 4500 3050 50  0001 C CNN
+F 0 "#PWR30" H 4500 3050 50  0001 C CNN
 F 1 "GND" H 4500 3150 50  0000 C CNN
 F 2 "" H 4500 3300 50  0001 C CNN
 F 3 "" H 4500 3300 50  0001 C CNN
@@ -98,7 +105,7 @@ AR Path="/5AB899C9/5AB87222" Ref="#PWR29"  Part="1"
 AR Path="/5AB8BB45/5AB87222" Ref="#PWR32"  Part="1" 
 AR Path="/5AB8D505/5AB87222" Ref="#PWR35"  Part="1" 
 AR Path="/5AB8DDC4/5AB87222" Ref="#PWR38"  Part="1" 
-F 0 "#PWR38" H 4300 3050 50  0001 C CNN
+F 0 "#PWR29" H 4300 3050 50  0001 C CNN
 F 1 "GND" H 4300 3150 50  0000 C CNN
 F 2 "" H 4300 3300 50  0001 C CNN
 F 3 "" H 4300 3300 50  0001 C CNN
@@ -116,7 +123,7 @@ AR Path="/5AB899C9/5AB87230" Ref="#PWR31"  Part="1"
 AR Path="/5AB8BB45/5AB87230" Ref="#PWR34"  Part="1" 
 AR Path="/5AB8D505/5AB87230" Ref="#PWR37"  Part="1" 
 AR Path="/5AB8DDC4/5AB87230" Ref="#PWR40"  Part="1" 
-F 0 "#PWR40" H 5900 3300 50  0001 C CNN
+F 0 "#PWR31" H 5900 3300 50  0001 C CNN
 F 1 "GND" H 5900 3400 50  0000 C CNN
 F 2 "" H 5900 3550 50  0001 C CNN
 F 3 "" H 5900 3550 50  0001 C CNN

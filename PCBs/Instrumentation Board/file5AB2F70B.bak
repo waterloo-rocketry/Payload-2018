@@ -31,6 +31,13 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:a2135-h
+LIBS:ap2204k-5
+LIBS:arduino_nano
+LIBS:fgpmmopa6h
+LIBS:Recovery Board Parts
+LIBS:Recovery Board-cache
+LIBS:sot-223
 LIBS:instrumentation_board_parts
 LIBS:instrumentation_board-cache
 EELAYER 25 0

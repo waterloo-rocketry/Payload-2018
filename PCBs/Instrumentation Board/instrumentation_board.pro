@@ -1,4 +1,4 @@
-update=2018-03-06 12:07:32 AM
+update=2018-03-26 11:20:36 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -27,7 +27,7 @@ NetIExt=net
 version=1
 [eeschema]
 version=1
-LibDir=
+LibDir=../Recovery Board;../libs/Schematic parts
 [eeschema/libraries]
 LibName1=power
 LibName2=device
