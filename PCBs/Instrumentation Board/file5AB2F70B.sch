@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:instrumentation_board-rescue
 LIBS:power
 LIBS:device
 LIBS:switches
@@ -60,7 +61,7 @@ U 1 1 5AB2F912
 P 5150 3250
 F 0 "U7" H 5150 3550 60  0000 C CNN
 F 1 "TPS71518DCKR" H 5100 3050 60  0000 C CNN
-F 2 "" H 5250 3250 60  0001 C CNN
+F 2 "sot:SOT-23-5" H 5250 3250 60  0001 C CNN
 F 3 "" H 5250 3250 60  0001 C CNN
 	1    5150 3250
 	1    0    0    -1  

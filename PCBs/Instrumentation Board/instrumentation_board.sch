@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:instrumentation_board-rescue
 LIBS:power
 LIBS:device
 LIBS:switches
@@ -248,7 +249,7 @@ U 1 1 5AA2036E
 P 8400 1300
 F 0 "U1" H 8400 1650 60  0000 C CNN
 F 1 "LSM6DS3HTR" H 8400 850 60  0000 C CNN
-F 2 "" H 8450 1300 60  0001 C CNN
+F 2 "Instrumentation Footprints:LGA-14" H 8450 1300 60  0001 C CNN
 F 3 "" H 8450 1300 60  0001 C CNN
 	1    8400 1300
 	1    0    0    -1  
@@ -318,7 +319,7 @@ U 1 1 5AA87733
 P 8400 2650
 F 0 "U2" H 8400 3000 60  0000 C CNN
 F 1 "LSM6DS3HTR" H 8400 2200 60  0000 C CNN
-F 2 "" H 8450 2650 60  0001 C CNN
+F 2 "lga:LGA-14" H 8450 2650 60  0001 C CNN
 F 3 "" H 8450 2650 60  0001 C CNN
 	1    8400 2650
 	1    0    0    -1  

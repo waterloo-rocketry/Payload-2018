@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:instrumentation_board-rescue
 LIBS:power
 LIBS:device
 LIBS:switches
@@ -60,7 +61,7 @@ U 1 1 5AB2EE92
 P 5050 3350
 F 0 "U6" H 5050 3650 60  0000 C CNN
 F 1 "XC6201P302MR-G" H 5050 3250 60  0000 C CNN
-F 2 "" H 5050 3350 60  0001 C CNN
+F 2 "sot:SOT-23-5" H 5050 3350 60  0001 C CNN
 F 3 "" H 5050 3350 60  0001 C CNN
 	1    5050 3350
 	1    0    0    -1  
