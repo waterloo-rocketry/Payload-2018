@@ -1,4 +1,4 @@
-update=2018-03-13 9:22:18 PM
+update=2018-03-30 1:38:55 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -37,7 +37,7 @@ SpiceUseNetNumbers=0
 LabSize=60
 [eeschema]
 version=1
-LibDir=
+LibDir=../Instrumentation Board;../libs/Schematic parts
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -91,3 +91,4 @@ LibName49=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/fgpmmopa6h
 LibName50=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board Parts
 LibName51=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board-cache
 LibName52=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/sot-223
+LibName53=instrumentation_board_parts
