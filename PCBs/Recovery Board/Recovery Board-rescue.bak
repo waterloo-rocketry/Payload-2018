@@ -1,17 +1,17 @@
 EESchema-LIBRARY Version 2.3
 #encoding utf-8
 #
-# Arduino_Nano-RESCUE-instrumentation_board
+# Arduino_Nano-RESCUE-Recovery_Board
 #
-DEF Arduino_Nano-RESCUE-instrumentation_board A 0 40 Y Y 1 F N
+DEF Arduino_Nano-RESCUE-Recovery_Board A 0 40 Y Y 1 F N
 F0 "A" 0 0 60 H V C CNN
-F1 "Arduino_Nano-RESCUE-instrumentation_board" 0 150 60 H V C CNN
+F1 "Arduino_Nano-RESCUE-Recovery_Board" 0 150 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
 S 500 1150 -450 -1150 0 1 0 N
-X D0/TX 1 700 1050 200 L 50 50 1 1 B
-X D1/RX 2 700 950 200 L 50 50 1 1 B
+X D1/RX 1 700 950 200 L 50 50 1 1 B
+X D0/TX 2 700 1050 200 L 50 50 1 1 B
 X RESET 3 -650 -150 200 R 50 50 1 1 I
 X GND 4 -650 -1000 200 R 50 50 1 1 W
 X D2 5 700 850 200 L 50 50 1 1 B
