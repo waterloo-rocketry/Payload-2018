@@ -56,7 +56,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Arduino_Nano-RESCUE-instrumentation_board A1
+L Arduino_Nano-RESCUE-instrumentation_board-RESCUE-instrumentation_board A1
 U 1 1 5A9B0A95
 P 2100 5550
 F 0 "A1" H 2100 5550 60  0000 C CNN
