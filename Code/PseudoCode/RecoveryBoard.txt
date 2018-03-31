@@ -1,0 +1,69 @@
+State options = Idle, Active, Armed
+
+On Startup {
+	state = idle
+	stratologger relay off
+	instr arduino relay off
+}
+
+Update Loop {
+	xbeeIn = read in data from xbee
+	dataPackage = new dataPackage //data to send back to transponder
+	if xbeeIn is a check in signal {
+		Make no state change
+	}
+	else {
+		Read in new state
+		if (newState = idle) {
+			switchToIdle() 
+		}
+		if (newState = active) {
+			switchToActive()
+		}
+		if (newState = Armed) {
+			switchToArmed()
+		}
+	}
+	
+	if (state = idle) {
+		do nothing
+	}
+	if (state = active {
+		read from i2c bus
+		add all data to dataPackage
+		if (i2c bus is empty) {
+			add disabled Instr arduino error to dataPackage
+		}
+	}
+	if (state = armed) {
+		read from i2c bus
+		read from stratologger softwareserial
+		if (i2c bus is empty) {
+			add disabled instr arduino error to dataPackage
+		}
+		if (softwareserial is empty) {
+			add disabled stratologger error to dataPackage
+		}
+		add all dataPackage to dataPackage
+	}
+	
+	
+}
+
+SwitchToActive {
+	Turn on instr arduino relay
+	Turn off stratologger relay
+	state = active
+}
+
+SwitchToArmed {
+	Turn on stratologger relay
+	Turn on instr arduino relay
+	state = armed
+}
+
+switchToIdle {
+	Turn off stratologger relay
+	Turn off instr arduino relay
+	state = idle
+}
