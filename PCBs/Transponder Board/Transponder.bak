@@ -79,9 +79,7 @@ F 3 "" H 1250 6250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1250 5950 1250 6050
-Wire Wire Line
-	1250 6050 1250 6250
+	1250 5950 1250 6250
 Connection ~ 1250 6050
 $Comp
 L XBee-S2C U?
@@ -187,9 +185,7 @@ $EndComp
 Wire Wire Line
 	3550 950  3550 900 
 Wire Wire Line
-	3300 900  3550 900 
-Wire Wire Line
-	3550 900  3800 900 
+	3300 900  3800 900 
 Wire Wire Line
 	3550 1250 3550 1350
 Text GLabel 3300 900  0    60   Input ~ 0
@@ -253,9 +249,7 @@ Wire Wire Line
 Wire Wire Line
 	6300 2150 6300 2500
 Wire Wire Line
-	6300 2800 6300 2950
-Wire Wire Line
-	6300 2950 6300 3050
+	6300 2800 6300 3050
 Wire Wire Line
 	6300 2950 7700 2950
 Wire Wire Line
@@ -415,19 +409,13 @@ F 3 "" H 3600 5550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2600 5400 3600 5400
-Wire Wire Line
-	3600 5400 3650 5400
+	2600 5400 3650 5400
 Connection ~ 3600 5400
 Wire Wire Line
-	2600 5500 3300 5500
-Wire Wire Line
-	3300 5500 3350 5500
+	2600 5500 3350 5500
 Connection ~ 3300 5500
 Wire Wire Line
-	2600 5600 3000 5600
-Wire Wire Line
-	3000 5600 3050 5600
+	2600 5600 3050 5600
 Connection ~ 3000 5600
 $Comp
 L GND #PWR?
@@ -467,9 +455,7 @@ XBEE-DIN
 Text GLabel 5500 900  2    60   Input ~ 0
 3.3V
 Wire Wire Line
-	4900 900  5150 900 
-Wire Wire Line
-	5150 900  5500 900 
+	4900 900  5500 900 
 Text GLabel 6400 1800 0    60   Input ~ 0
 3.3V
 $Comp
@@ -601,13 +587,7 @@ F 3 "" H 6550 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6400 1800 6550 1800
-Wire Wire Line
-	6550 1800 6850 1800
-Wire Wire Line
-	6850 1800 7150 1800
-Wire Wire Line
-	7150 1800 7900 1800
+	6400 1800 7900 1800
 Wire Wire Line
 	6550 1850 6550 1800
 Connection ~ 6550 1800
