@@ -1,4 +1,4 @@
-update=2018-03-13 8:47:24 PM
+update=2018-04-02 9:53:09 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -27,7 +27,7 @@ NetIExt=net
 version=1
 [eeschema]
 version=1
-LibDir=
+LibDir=D:/Rocketry/Payload Repo/PCBs/Instrumentation Board
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -69,3 +69,4 @@ LibName37=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board Part
 LibName38=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board-cache
 LibName39=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/sot-223
 LibName40=D:/Rocketry/Payload Repo/PCBs/Instrumentation Board/instrumentation_board_parts
+LibName41=instrumentation_board-cache
