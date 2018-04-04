@@ -291,12 +291,12 @@ Text GLabel 1550 1700 2    60   Input ~ 0
 $Comp
 L GND #PWR08
 U 1 1 5AA89F41
-P 2100 1150
-F 0 "#PWR08" H 2100 900 50  0001 C CNN
-F 1 "GND" H 2100 1000 50  0000 C CNN
-F 2 "" H 2100 1150 50  0001 C CNN
-F 3 "" H 2100 1150 50  0001 C CNN
-	1    2100 1150
+P 2100 800
+F 0 "#PWR08" H 2100 550 50  0001 C CNN
+F 1 "GND" H 2100 650 50  0000 C CNN
+F 2 "" H 2100 800 50  0001 C CNN
+F 3 "" H 2100 800 50  0001 C CNN
+	1    2100 800 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -322,9 +322,9 @@ F 3 "" H 1350 1700 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	1550 1000 2100 1000
+	1550 650  2100 650 
 Wire Wire Line
-	2100 1000 2100 1150
+	2100 650  2100 800 
 $Comp
 L Conn_01x02 J3
 U 1 1 5AA8A30C
@@ -550,8 +550,8 @@ Wire Wire Line
 	1750 1100 1750 1600
 Wire Wire Line
 	1750 1600 1550 1600
-Text Notes 950  1100 0    60   ~ 0
-Battery
+Text Notes 850  1100 0    60   ~ 0
+Battery 1
 Text Notes 950  1700 0    60   ~ 0
 Switch
 $Comp
@@ -649,4 +649,23 @@ Text GLabel 4150 4100 2    60   Input ~ 0
 XBEE-DOUT
 Wire Wire Line
 	2600 4100 3450 4100
+$Comp
+L Conn_01x02 J?
+U 1 1 5AC4138A
+P 1350 750
+F 0 "J?" H 1350 850 50  0000 C CNN
+F 1 "Conn_01x02" H 1350 550 50  0000 C CNN
+F 2 "molex:molex_kk_22-23-2021" H 1350 750 50  0001 C CNN
+F 3 "" H 1350 750 50  0001 C CNN
+	1    1350 750 
+	-1   0    0    1   
+$EndComp
+Text Notes 850  750  0    60   ~ 0
+Battery 2
+Wire Wire Line
+	1550 1000 1750 1000
+Wire Wire Line
+	1750 1000 1750 750 
+Wire Wire Line
+	1750 750  1550 750 
 $EndSCHEMATC
