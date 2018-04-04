@@ -679,4 +679,8 @@ Wire Wire Line
 	3250 4450 3300 4450
 Wire Wire Line
 	3250 4550 3300 4550
+Text GLabel 1600 4850 0    60   Input ~ 0
+5V
+Wire Wire Line
+	1900 4850 1600 4850
 $EndSCHEMATC
