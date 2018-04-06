@@ -1,4 +1,4 @@
-update=2018-04-02 9:43:42 PM
+update=2018-04-05 9:19:44 PM
 version=1
 last_client=kicad
 [cvpcb]
@@ -16,6 +16,25 @@ NetFmtName=
 SpiceForceRefPrefix=0
 SpiceUseNetNumbers=0
 LabSize=60
+[pcbnew]
+version=1
+PageLayoutDescrFile=
+LastNetListRead=Recovery Board.net
+PadDrill=0.762
+PadDrillOvalY=0.762
+PadSizeH=1.524
+PadSizeV=1.524
+PcbTextSizeV=1.5
+PcbTextSizeH=1.5
+PcbTextThickness=0.3
+ModuleTextSizeV=1
+ModuleTextSizeH=1
+ModuleTextSizeThickness=0.15
+SolderMaskClearance=0.2
+SolderMaskMinWidth=0
+DrawSegmentWidth=0.2
+BoardOutlineThickness=0.15
+ModuleOutlineThickness=0.15
 [eeschema]
 version=1
 LibDir=../Instrumentation Board;../libs/Schematic parts
@@ -74,22 +93,4 @@ LibName51=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board Part
 LibName52=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/Recovery Board-cache
 LibName53=D:/Rocketry/Payload Repo/PCBs/libs/Schematic parts/sot-223
 LibName54=instrumentation_board_parts
-[pcbnew]
-version=1
-PageLayoutDescrFile=
-LastNetListRead=Recovery Board_2.net
-PadDrill=0.762
-PadDrillOvalY=0.762
-PadSizeH=1.524
-PadSizeV=1.524
-PcbTextSizeV=1.5
-PcbTextSizeH=1.5
-PcbTextThickness=0.3
-ModuleTextSizeV=1
-ModuleTextSizeH=1
-ModuleTextSizeThickness=0.15
-SolderMaskClearance=0.2
-SolderMaskMinWidth=0
-DrawSegmentWidth=0.2
-BoardOutlineThickness=0.15
-ModuleOutlineThickness=0.15
+LibName55=instrumentation_board-cache

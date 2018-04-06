@@ -36,10 +36,12 @@ LIBS:a2135-h
 LIBS:arduino_nano
 LIBS:fgpmmopa6h
 LIBS:sot-223
+LIBS:Placeholders
 LIBS:Recovery Board Parts
 LIBS:ap2204k-5
 LIBS:Recovery Board-cache
 LIBS:instrumentation_board_parts
+LIBS:instrumentation_board-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
@@ -136,9 +138,9 @@ F 3 "" H 6950 1100 60  0001 C CNN
 	1    6900 1100
 	1    0    0    -1  
 $EndComp
-Text GLabel 7550 900  2    60   Input Italic 0
-Stratologger_Switch-
 Text GLabel 7550 1300 2    60   Input Italic 0
+Stratologger_Switch-
+Text GLabel 7550 900  2    60   Input Italic 0
 Stratologger_Switch+
 Text GLabel 2600 3300 2    60   Input ~ 0
 7.4V
@@ -339,9 +341,9 @@ F 3 "" H 2400 2000 50  0001 C CNN
 $EndComp
 Text GLabel 2600 2700 2    60   Input Italic 0
 Intrument_Arduino_Power
-Text GLabel 2600 2100 2    60   Input Italic 0
-Stratologger_Switch+
 Text GLabel 2600 2000 2    60   Input Italic 0
+Stratologger_Switch+
+Text GLabel 2600 2100 2    60   Input Italic 0
 Stratologger_Switch-
 $Comp
 L Conn_01x02 J2
