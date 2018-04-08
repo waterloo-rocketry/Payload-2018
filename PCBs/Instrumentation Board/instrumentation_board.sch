@@ -452,7 +452,7 @@ U 1 1 5AB429C0
 P 5400 2000
 F 0 "Q1" H 5600 2050 50  0000 L CNN
 F 1 "TEMT6000X01" H 5600 1950 50  0000 L CNN
-F 2 "Diodes_SMD:D_1206" H 5600 2100 50  0001 C CNN
+F 2 "TEMT6000X01:TEMT6000X01" H 5600 2100 50  0001 C CNN
 F 3 "" H 5400 2000 50  0001 C CNN
 	1    5400 2000
 	0    1    1    0   
@@ -551,7 +551,7 @@ Text GLabel 5650 5250 2    60   Input ~ 0
 1.8V
 Text GLabel 4950 5250 0    60   Input ~ 0
 5V
-Text GLabel 5650 5100 2    60   Input ~ 0
+Text GLabel 5950 5100 2    60   Input ~ 0
 INT0_1.8V
 $Sheet
 S 4950 5700 700  350 
@@ -569,7 +569,7 @@ Text GLabel 4950 5950 0    60   Input ~ 0
 5V
 Text GLabel 4950 5800 0    60   Input ~ 0
 INT1_5V
-Text GLabel 5650 5800 2    60   Input ~ 0
+Text GLabel 5950 5800 2    60   Input ~ 0
 INT1_1.8V
 Text GLabel 3100 4700 2    60   Input ~ 0
 INT1_5V
@@ -814,4 +814,26 @@ Connection ~ 9550 2400
 Wire Wire Line
 	9000 1050 9550 1050
 Connection ~ 9550 1050
+$Comp
+L R R11
+U 1 1 5ACAE98D
+P 5800 5100
+F 0 "R11" V 5700 5100 50  0000 C CNN
+F 1 "100" V 5800 5100 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 5730 5100 50  0001 C CNN
+F 3 "" H 5800 5100 50  0001 C CNN
+	1    5800 5100
+	0    1    1    0   
+$EndComp
+$Comp
+L R R12
+U 1 1 5ACB0DCF
+P 5800 5800
+F 0 "R12" V 5700 5800 50  0000 C CNN
+F 1 "100" V 5800 5800 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 5730 5800 50  0001 C CNN
+F 3 "" H 5800 5800 50  0001 C CNN
+	1    5800 5800
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC
