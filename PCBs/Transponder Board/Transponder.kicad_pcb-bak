@@ -203,44 +203,6 @@
     (add_net XBEE-DOUT)
   )
 
-  (module Mounting_Holes:MountingHole_3.2mm_M3 (layer F.Cu) (tedit 5AC3049D) (tstamp 5AC5315A)
-    (at 62 61)
-    (descr "Mounting Hole 3.2mm, no annular, M3")
-    (tags "mounting hole 3.2mm no annular m3")
-    (attr virtual)
-    (fp_text reference REF** (at 0 -4.2) (layer F.SilkS) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text user %R (at 0.3 0) (layer F.Fab)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
-    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
-    (pad 1 np_thru_hole circle (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask))
-  )
-
-  (module Mounting_Holes:MountingHole_3.2mm_M3 (layer F.Cu) (tedit 5AC30491) (tstamp 5AC53153)
-    (at 119 99)
-    (descr "Mounting Hole 3.2mm, no annular, M3")
-    (tags "mounting hole 3.2mm no annular m3")
-    (attr virtual)
-    (fp_text reference REF** (at 0 -4.2) (layer F.SilkS) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text user %R (at 0.3 0) (layer F.Fab)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
-    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
-    (pad 1 np_thru_hole circle (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask))
-  )
-
   (module screwTerminals:VI0921550000G (layer F.Cu) (tedit 5AC2FD43) (tstamp 5AC2E29F)
     (at 91.44 137.16)
     (path /5AB72699)
@@ -939,25 +901,6 @@
       (net 7 GND))
   )
 
-  (module Mounting_Holes:MountingHole_3.2mm_M3 (layer F.Cu) (tedit 5AC3048B) (tstamp 5AC30080)
-    (at 62 141)
-    (descr "Mounting Hole 3.2mm, no annular, M3")
-    (tags "mounting hole 3.2mm no annular m3")
-    (attr virtual)
-    (fp_text reference REF** (at -8.636 -2.54) (layer F.SilkS) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_text user %R (at 0.3 0) (layer F.Fab)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
-    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
-    (pad 1 np_thru_hole circle (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask))
-  )
-
   (module Logos:logo6 (layer F.Cu) (tedit 5A9C9ADF) (tstamp 5AC30459)
     (at 71.882 127)
     (fp_text reference G*** (at 5.588 4.572) (layer F.SilkS) hide
@@ -1596,6 +1539,63 @@
       (net 49 "Net-(U3-Pad19)"))
     (pad 20 thru_hole circle (at 10.9982 -19.99996) (size 1.524 1.524) (drill 0.79756) (layers *.Cu F.Paste F.SilkS F.Mask)
       (net 50 "Net-(U3-Pad20)"))
+  )
+
+  (module Mounting_Holes:MountingHole_3.2mm_M3_Pad (layer F.Cu) (tedit 5AC6E9E2) (tstamp 5AC5315A)
+    (at 62 61)
+    (descr "Mounting Hole 3.2mm, M3")
+    (tags "mounting hole 3.2mm m3")
+    (attr virtual)
+    (fp_text reference REF** (at 0 -4.2) (layer F.SilkS) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text user %R (at 0.3 0) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
+    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole circle (at 0 0) (size 6.4 6.4) (drill 3.2) (layers *.Cu *.Mask))
+  )
+
+  (module Mounting_Holes:MountingHole_3.2mm_M3_Pad (layer F.Cu) (tedit 5AC6E9E6) (tstamp 5AC53153)
+    (at 119 99)
+    (descr "Mounting Hole 3.2mm, M3")
+    (tags "mounting hole 3.2mm m3")
+    (attr virtual)
+    (fp_text reference REF** (at 0 -4.2) (layer F.SilkS) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text user %R (at 0.3 0) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
+    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole circle (at 0 0) (size 6.4 6.4) (drill 3.2) (layers *.Cu *.Mask))
+  )
+
+  (module Mounting_Holes:MountingHole_3.2mm_M3_Pad (layer F.Cu) (tedit 5AC6E9EA) (tstamp 5AC30080)
+    (at 62 141)
+    (descr "Mounting Hole 3.2mm, M3")
+    (tags "mounting hole 3.2mm m3")
+    (attr virtual)
+    (fp_text reference REF** (at 0 -4.2) (layer F.SilkS) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text value MountingHole_3.2mm_M3 (at 0 4.2) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_text user %R (at 0.3 0) (layer F.Fab) hide
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (fp_circle (center 0 0) (end 3.2 0) (layer Cmts.User) (width 0.15))
+    (fp_circle (center 0 0) (end 3.45 0) (layer F.CrtYd) (width 0.05))
+    (pad 1 thru_hole circle (at 0 0) (size 6.4 6.4) (drill 3.2) (layers *.Cu *.Mask))
   )
 
   (gr_text "+ -" (at 82.042 59.182) (layer F.SilkS)
