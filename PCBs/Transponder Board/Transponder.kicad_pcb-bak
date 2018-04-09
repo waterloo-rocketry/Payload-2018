@@ -3,7 +3,7 @@
   (general
     (links 60)
     (no_connects 0)
-    (area 51.021143 55.825 128.557143 146.275)
+    (area 52.442857 55.825 128.557143 146.275)
     (thickness 1.6)
     (drawings 24)
     (tracks 295)
@@ -85,9 +85,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory "Gerber Files/"))
   )
 
   (net 0 "")
@@ -902,7 +902,7 @@
   )
 
   (module Logos:logo6 (layer F.Cu) (tedit 5A9C9ADF) (tstamp 5AC30459)
-    (at 71.882 127)
+    (at 72.39 123.825)
     (fp_text reference G*** (at 5.588 4.572) (layer F.SilkS) hide
       (effects (font (thickness 0.3)))
     )
@@ -1659,7 +1659,7 @@
   (gr_text "LCD Display" (at 74.93 131.445) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text "How To Rotate Text in MS Kicad\nAdam Paul\n2018" (at 75.184 127.508 3.2) (layer F.SilkS)
+  (gr_text "Not Going \nto Space Today\nAdam Paul\n2018" (at 76.2 123.825) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.1)) (justify left))
   )
 
