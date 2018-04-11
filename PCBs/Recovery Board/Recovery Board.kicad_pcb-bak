@@ -3,7 +3,7 @@
   (general
     (links 62)
     (no_connects 0)
-    (area 82.924999 93.924999 168.075001 150.075001)
+    (area 77.442857 86.7212 173.557143 151.275)
     (thickness 1.6)
     (drawings 23)
     (tracks 250)
@@ -1794,10 +1794,10 @@
       (net 23 GoPro_Power))
   )
 
-  (module molex:molex_kk_22-23-2021 (layer F.Cu) (tedit 5ACC2716) (tstamp 5ACC273C)
+  (module molex:molex_kk_22-23-2021 (layer F.Cu) (tedit 5ACC277A) (tstamp 5ACC273C)
     (at 118.11 140.97 180)
     (path /5ABE74E1)
-    (fp_text reference J6 (at -3.175 -3.175 180) (layer F.SilkS)
+    (fp_text reference J6 (at -3.81 -3.175 180) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Conn_01x02 (at 0 -0.5 180) (layer F.Fab) hide
