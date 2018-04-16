@@ -1,0 +1,134 @@
+Pushbutton leftButton
+Pushbutton rightButton
+Pushbutton selectButton
+
+Display state options = 
+	LowPowerMode,
+	ActiveMode,
+	ArmedMode,
+	GPSData,
+	AltitudeData,
+	TemperatureData,
+	FlightData,
+	SpeedData
+	
+	//what the LCD is showing
+}
+
+ModeState = {
+	OFF,
+	SENDING,
+	ON
+}
+
+ModeState lowPowerState
+ModeState activeState
+ModeState armedState
+
+DisplayState transponderState
+
+bool cubesatConnected
+
+
+On startup {
+
+}
+
+Main Update Loop {
+	xbeeData = Read Data from xbee
+	dataPackage = new DataPackage
+	
+	if (xbeeData.state == idle) {
+		lowPowerState = on
+		activeState = off
+		armedState = off
+	}
+	if (xbeeData.state == active) {
+		lowPowerState = off
+		activeState = on
+		armedState = off
+	}
+	if (xbeeData.state == armed) {
+		lowPowerState = off
+		activeState = off
+		armedState = on
+	}
+	
+	if (xbee has no data) {
+		cubesatConnected = false
+	}
+	Read in from buttons
+	if (Left button is pressed) {
+		if (transponderState != changeSystemMode) {
+			transponderState = prev state in list
+		}
+		
+	}
+	if (Right button is pressed) {
+		if (transponderState != changeSystemMode) {
+			transponderState = next state in list
+		}
+	}	
+	
+	// I think the LCD has 32 spots for characters, divided into 2 lines. if I'm wrong just change the wording so it fits. As long as we understand its :ok_hand:
+	Switch(transponderState) {
+		case LowPowerMode:
+			Write "LOW POWER MODE" to first line
+			if (!cubesatConnected) {
+				Write "ERR: NO CONN" to second line
+			}
+			else {
+				Write lowPowerState to second line //If the state is off, left justify it. If its sending, center it, and if its on right justify it
+				if (selectButton is pressed && lowPowerState != sending) {
+					switch lowPowerState from off to sending or from on to off
+					add the updated state to dataPackage
+				}	
+			}
+		case ActiveMode:
+			Write "ACTIVE MODE" to first line
+			if (!cubesatConnected) {
+				Write "ERR: NO CONN" to second line
+			}
+			else {
+				Write activeState to second line //If the state is off, left justify it. If its sending, center it, and if its on right justify it
+				if (selectButton is pressed && activeState != sending) {
+					switch activeState from off to sending or from on to off
+					add the updated state to dataPackage
+				}	
+			}
+		case ArmedMode:
+			Write "ARMED MODE" to first line
+			if (!cubesatConnected) {
+				Write "ERR: NO CONN" to second line
+			}
+			else {
+				Write ArmedMode to second line //If the state is off, left justify it. If its sending, center it, and if its on right justify it
+				if (selectButton is pressed && ArmedMode != sending) {
+					switch ArmedMode from off to sending or from on to off
+					add the updated state to dataPackage
+				}	
+			}
+		case GPSData:
+			Write "GPS: " + GPSX to first line
+			Write "GPS: " + GPSY to second line
+		case AltitudeData:
+			Write "ALTITUDE: " +altitude + " ft" to first line
+			Write "APOGEE: " + apogee + " ft" to second line		//get apogee from pressure sensor altitude data (highest recorded)
+		case TemperatureData:
+			Write "AVGTEMP:" to first line
+			Write avgTemp to second line	
+		case FlightData:
+			///////////////////////////
+			//Determine deploy from the ambient light sensor. Bright means it deployed
+			//Determine chute if velocity is within a range that would indicate good chute. Find velocity from altimeter data
+			//Determine landed if velocity is ~0
+			//////////////////////////
+			Write "DEPLY: " + (Y if deployed = true, N if deployed = false) + " CHUTE: " + (Y if chute = true, N if chute = false) to first line 
+			Write "LANDED: " + (Y if landed = true, N if landed = false) to second line
+		case SpeedData:
+			Write "VERT SPEED: " + velocity to first line
+			Write "ACC " + ACCX + ACCY + ACCZ to second line					
+	}
+	Write xbeeData to SDCard
+	send dataPackage over xbee
+}

@@ -1,4 +1,5 @@
 State options = Idle, Active, Armed
+string lastGPS = null
 
 On Startup {
 	state = idle
@@ -8,6 +9,18 @@ On Startup {
 
 Update Loop {
 	xbeeIn = read in data from xbee
+	////////
+	//using this to put the xbee in idle (low power) mode if we have lost conn for an hour. That way if it lands in the middle of nowhere we can keep transmitting location for days
+	if (no data from xbee and timer hasn't started) {
+		start timer
+	}
+	else {
+		reset timer
+	}
+	if (timer has reached 1 hour) {
+		switchToIdle()
+	}
+	
 	dataPackage = new dataPackage //data to send back to transponder
 	if xbeeIn is a check in signal {
 		Make no state change
@@ -26,7 +39,8 @@ Update Loop {
 	}
 	
 	if (state = idle) {
-		do nothing
+		if (lastGPS != null)
+			add most recent GPS coords to dataPackage
 	}
 	if (state = active {
 		read from i2c bus
@@ -34,6 +48,7 @@ Update Loop {
 		if (i2c bus is empty) {
 			add disabled Instr arduino error to dataPackage
 		}
+		lastGPS = GPS coords from data
 	}
 	if (state = armed) {
 		read from i2c bus
@@ -44,7 +59,8 @@ Update Loop {
 		if (softwareserial is empty) {
 			add disabled stratologger error to dataPackage
 		}
-		add all dataPackage to dataPackage
+		lastGPS = GPS coords from data
+		add all data to dataPackage
 	}
 	
 	

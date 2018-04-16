@@ -1,6 +1,13 @@
 Main Update Loop {
 	Create new dataPackage
-	read in data from GPS over UART
-	add to package
-	 
+	Read
+		read in data from GPS over UART
+		Read from I2C
+			Pressure sensor
+			IMU x2
+		Read thermistor x3
+		Read light sensor
+	add to package	
+	Write package to SD card
+	send package over i2c to recovery board
 }
