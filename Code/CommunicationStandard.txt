@@ -1,0 +1,58 @@
+Communication standard for sending payload data between arduinos.
+Symbols
+B - Begin
+
+E - Error
+	I - Disconnected instr arduinos
+	A - Disconnected altimiter (stratologger) error
+	
+D - Data 
+	I - Instr board
+		1-9 - Sensor number
+
+		X - Sensor X component
+		Y - Sensor Y component
+		Z - Sensor Z component
+
+		T - Thermistor (1-3) 
+		L - Ambient Light
+		A - Accelerometer (1-2) (XYZ)
+		R - Gyroscope (1-2) (XYZ)
+		P - Pressure(Altitude) sensor
+		G - GPS (XYZ)
+		
+	R - Recovery board
+		T - State
+		1-3 - State number
+
+	T - Transponder board
+		T - State
+		1-3 - State number
+		
+S - Message Stop
+
+A - Acknowledge
+
+Message Format
+All Messages start with 'B'
+Next send the message type (either 'E' or 'D')
+For an error
+	Send the error code
+For Data
+	Send the source arduino of the data ('I', 'R', or 'T')
+	Send the source sensor of the data
+	send the data
+send 'S' to signify message end
+
+For receiving messages
+Check serial for B character
+Once found
+	Read until S is reached
+	parse message
+	send back "BAS"
+
+	
+Example: Send the reading (32 celsius) from thermistor 1 on the instr board - "BIT132S"
+Example: Send a disconnected stratologger error - "BEAS"
+
+

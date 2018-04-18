@@ -1,4 +1,4 @@
-update=2018-03-30 5:56:58 PM
+update=2018-04-17 9:57:46 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -70,3 +70,13 @@ LibName38=C:/Users/paula/OneDrive/Documents/Recovery Board/Recovery Board Parts
 LibName39=C:/Users/paula/OneDrive/Documents/Recovery Board/Recovery Board-cache
 LibName40=C:/Users/paula/OneDrive/Documents/Recovery Board/sot-223
 LibName41=instrumentation_board_parts
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
