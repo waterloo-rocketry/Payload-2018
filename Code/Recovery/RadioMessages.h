@@ -21,6 +21,8 @@
 #define PRESSURE_SENSOR 'P'
 #define GPS 'G'
 
+#define DATA_STOP 'C'	//sent after each piece of data
+
 //State defs
 #define STATE 'T'
 

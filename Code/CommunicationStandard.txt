@@ -10,14 +10,12 @@ D - Data
 	I - Instr board
 		1-9 - Sensor number
 
-		X - Sensor X component
-		Y - Sensor Y component
-		Z - Sensor Z component
+		C - numberical component end
 
 		T - Thermistor (1-3) 
 		L - Ambient Light
 		A - Accelerometer (1-2) (XYZ)
-		R - Gyroscope (1-2) (XYZ)
+		Y - Gyroscope (1-2) (XYZ)
 		P - Pressure(Altitude) sensor
 		G - GPS (XYZ)
 		
@@ -52,7 +50,7 @@ Once found
 	send back "BAS"
 
 	
-Example: Send the reading (32 celsius) from thermistor 1 on the instr board - "BIT132S"
+Example: Send the reading (32 celsius) from thermistor 1 on the instr board - "BIT1C32CS"
 Example: Send a disconnected stratologger error - "BEAS"
 
 
