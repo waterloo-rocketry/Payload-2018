@@ -1,0 +1,7 @@
+#define LOW_POWER_1 "LOW POWER MODE"
+#define ACTIVE_1 "ACTIVE MODE"
+#define ARMED_1 "ARMED MODE"
+
+#define NO_CONNECTION "ERROR: NO CONN"
+
+#define GPS "GPS: "
