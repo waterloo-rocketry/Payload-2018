@@ -5,3 +5,18 @@
 #define NO_CONNECTION "ERROR: NO CONN"
 
 #define GPS "GPS: "
+#define ALTITUDE "ALTITUDE: "
+#define APOGEE "APOGEE: "
+#define DEPLOY "DEPLOYED: "
+#define CHUTE " CHUTE: "
+#define LANDED "LANDED: "
+#define AVGTEMP "AVGTEMP: "
+#define VERTSPEED "VERT SPEED: " 
+#define ACCELERATION "ACC: "
+
+#define THERM_DATA_FILENAME "Thermistor"
+#define LIGHT_DATA_FILENAME "AmbientLight"
+#define ACC_DATA_FILENAME "Accelerometer"
+#define GYRO_DATA_FILENAME "Gyroscope"
+#define PRESSURE_DATA_FILENAME "PressureSensor"
+#define GPS_DATA_FILENAME "GPSCoords"
