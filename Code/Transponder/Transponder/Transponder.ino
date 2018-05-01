@@ -3,6 +3,7 @@
  Created:	4/23/2018 12:08:16 PM
  Author:	paula
 */
+
 #include <LiquidCrystal.h>
 #include "transponderStrings.h"
 #include "PinRefs.h"
@@ -10,8 +11,6 @@
 
 #include <SPI.h>
 #include <SD.h>
-
-#define DEBUG 0
 
 enum DisplayStateOptions {
 	LowPowerMode,
@@ -29,6 +28,7 @@ enum ModeState {
 	SENDING,
 	ON
 };
+String ModeStateStrings[3] = { "OFF", "SENDING", "ON" };
 
 ModeState LowPowerState;
 ModeState ActiveState;
@@ -37,6 +37,7 @@ ModeState ArmedState;
 DisplayStateOptions TransponderState;
 
 bool CubesatConnected = false;
+bool MessageReceived = false;
 
 // Push Buttons
 int LeftButtonState = 0;
@@ -70,6 +71,9 @@ float gpsData[2] = { 0,0 };
 
 int fileUID;	//append this to filenames to avoid overwriting files
 
+uint32_t LastConnectionTimer = 0;
+uint32_t checkForMessageTimer = 0;
+
 // the setup function runs once when you press reset or power the board
 void setup() {
 	pinMode(LeftButton, INPUT);
@@ -80,20 +84,29 @@ void setup() {
 	CreateLowPowerMode();
 
 	fileUID = random(32767);
-
+	Serial.begin(9600);
 	//Initialize SD Card
 	if (!SD.begin()) {
-#ifdef DEBUG
-		Serial.println("initialization failed!");
-#endif // DEBUG		
-		return;
+		//return;
 	}
+}
+
+void checkForConnection() {
+	if (MessageReceived != CubesatConnected) {
+		if (TransponderState == LowPowerMode) CreateLowPowerMode();
+		if (TransponderState == ActiveMode) CreateActiveMode();
+		if (TransponderState == ArmedMode) CreateArmedMode();
+	}
+	CubesatConnected = MessageReceived;
+	MessageReceived = false;
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
 	LeftButtonState = digitalRead(LeftButton);
 	RightButtonState = digitalRead(RightButton);
+	SelectButtonState = digitalRead(SelectButton);
+
 	if (LeftButtonState == HIGH && !LeftPressed) {
 		LeftPressed = true;
 		switchDisplayState(false);
@@ -105,8 +118,45 @@ void loop() {
 		switchDisplayState(true);
 	}
 	if (RightButtonState == LOW) RightPressed = false;
+
+	if (SelectButtonState == HIGH && !SelectPressed) {
+		SelectPressed = true;
+		ChangeCubesatMode();
+	}
+	if (SelectButtonState == LOW) SelectPressed = false;
+
+	if (millis() - LastConnectionTimer > 1000) {
+		LastConnectionTimer = millis();
+		GetMessageFromRadio();
+	}
 }
 
+void GetMessageFromRadio() {
+	String message = ReadFromSerial();
+
+	if (message != "") {
+		ParseMessage(message);
+		LastConnectionTimer = millis();
+		if (CubesatConnected == false) {
+			CubesatConnected = true;
+			if (TransponderState == LowPowerMode) CreateLowPowerMode();
+			if (TransponderState == ActiveMode) CreateActiveMode();
+			if (TransponderState == ArmedMode) CreateArmedMode();
+		}
+	}
+	if (millis() - LastConnectionTimer > 5000) {
+		if (CubesatConnected == true) {
+			CubesatConnected = false;
+			LowPowerState = OFF;
+			ActiveState = OFF;
+			ArmedState = OFF;
+
+			if (TransponderState == LowPowerMode) CreateLowPowerMode();
+			if (TransponderState == ActiveMode) CreateActiveMode();
+			if (TransponderState == ArmedMode) CreateArmedMode();
+		}
+	}
+}
 
 void ParseMessage(String data) {
 	char messageType = data[1];
@@ -165,18 +215,21 @@ void ParseMessage(String data) {
 				UpdateGPSData(GPSX, GPSY);
 			}
 		}
-	}
-	else if (messageSource == RECOVERY_SOURCE) {
-		char recoveryMessage = data[3];
-		switch (recoveryMessage)
-		{
-		case STATE:
-			ChangeState(ParseInt(data, (int *)(4)));
-			break;
-		default:
-			break;
+		else if (messageSource == RECOVERY_SOURCE) {
+			char recoveryMessage = data[3];
+			int stateChar = 4;
+			switch (recoveryMessage)
+			{
+			case STATE:
+				
+				UpdateState(ParseInt(data, &stateChar));
+				break;
+			default:
+				break;
+			}
 		}
 	}
+	
 }
 
 #pragma region UpdateValues
@@ -306,6 +359,25 @@ void switchDisplayState(bool increase) {
 	}
 }
 
+void ChangeCubesatMode() {
+	if (!CubesatConnected) return;
+	if (TransponderState == LowPowerMode) {
+		LowPowerState = SENDING;
+		CreateLowPowerMode();
+		SendNewState();
+	}
+	else if (TransponderState == ActiveMode) {
+		ActiveState = SENDING;
+		CreateActiveMode();
+		SendNewState();
+	}
+	else if (TransponderState == ArmedMode) {
+		ArmedState = SENDING;
+		CreateArmedMode();
+		SendNewState();
+	}
+}
+
 void CreateLowPowerMode() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
@@ -316,7 +388,7 @@ void CreateLowPowerMode() {
 	}
 	else {
 		lcd.setCursor(0, 1);
-		lcd.print((String)LowPowerState);
+		lcd.print(ModeStateStrings[LowPowerState]);
 	}
 }
 
@@ -330,7 +402,7 @@ void CreateActiveMode() {
 	}
 	else {
 		lcd.setCursor(0, 1);
-		lcd.print((String)ActiveState);
+		lcd.print(ModeStateStrings[ActiveState]);
 	}
 }
 
@@ -344,7 +416,7 @@ void CreateArmedMode() {
 	}
 	else {
 		lcd.setCursor(0, 1);
-		lcd.print((String)ArmedState);
+		lcd.print(ModeStateStrings[ArmedState]);
 	}
 }
 
@@ -415,8 +487,27 @@ void LogToSD(String data, String fileName) {
 	}
 }
 
-void ChangeState(int newState) {
-	//TODO: CHANGE THE STATE
+void UpdateState(int newState) {
+	
+	if (newState == 0) {
+		LowPowerState = ON;
+		ActiveState = OFF;
+		ArmedState = OFF;
+		if (TransponderState == LowPowerMode) CreateLowPowerMode();
+	}
+	else if (newState == 1) {
+		LowPowerState = OFF;
+		ActiveState = ON;
+		ArmedState = OFF;
+		if (TransponderState == ActiveMode) CreateActiveMode();
+	}
+	else if (newState == 2) {
+		LowPowerState = OFF;
+		ActiveState = OFF;
+		ArmedState = ON;
+		if (TransponderState == ArmedMode) CreateArmedMode();
+	}
+	
 }
 
 int ParseInt(String data, int* startChar) {
@@ -436,21 +527,6 @@ float ParseFloat(String data, int* startChar) {
 	}
 	return out.toFloat();
 }
-
-String ReadFromSerial() {
-	String inString = "";
-	while (Serial.available()) {
-		char inChar = (char)Serial.read();
-		if (inChar == MESSAGE_BEGIN || inString != "") inString += inChar; //search for message begin
-		if (inString != "" && inChar == MESSAGE_STOP) break;
-	}
-	return inString;
-}
-
-
-
-
-
 
 
 /*

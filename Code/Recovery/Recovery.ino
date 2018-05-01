@@ -5,14 +5,16 @@
 
 #include "RadioMessages.h"
 #include <Wire.h>
+#include <SoftwareSerial.h>
 
 enum RecoveryState {
-  Idle,
-  Active,
-  Armed
+	Idle,
+	Active,
+	Armed
 };
 
 RecoveryState state;
+SoftwareSerial mySerial(2, 3);
 
 void setup() {
 	pinMode(stratSoftSerialPin, INPUT);
@@ -20,69 +22,113 @@ void setup() {
 	pinMode(instrRelayPin, OUTPUT);
 
 	SwitchState(1);
+	pinMode(LED_BUILTIN, OUTPUT);
 
 	// initialize serial and wire:
 	Wire.begin();//join i2c bus, address optional for master
+	mySerial.begin(9600);
 	Serial.begin(9600);
 	// reserve 200 bytes for the xbeeIn:
-	
+	state = Idle;
 }
 
 void loop() {
-  String outgoingData = MESSAGE_BEGIN + DATA_MESSAGE + RECOVERY_SOURCE +  STATE + (int)state + DATA_STOP + DATA_STOP;
-  String xbeeData = ReadFromSerial();
-  if (xbeeData != "")
-	ParseReceivedMessage(xbeeData);
-  
-  if (state == 1) {
-	
-  }
-  else if (state == 2) {
-	//read from i2C bus
-      Wire.requestFrom(slaveNum, 6); //request 6 bytes from slave device 
-	  String I2CData = "";
-      while (Wire.available()) {  //slave may send less than requested
-        char temp = Wire.read();   //receive a byte as a char
-		I2CData += temp;       // add char to data package
-      }
-	  if (I2CData != "") {
-		  outgoingData += INSTR_SOURCE
-	  }
-      if (outgoingData == ""){
-		  outgoingData = "disInstrError"; //  add disabled instr arduino error to dataPackage if bus empty
-      }
-  }
-  else if (state == 3) {
-  
-  }
+	delay(1000);
+	int newState;
 
-}
+	if (state == Idle) newState = 0;
+	else if (state == Active) newState = 1;
+	else if (state == Armed) newState = 2;
+	else return;
+	String outgoingData = String(MESSAGE_BEGIN) + DATA_MESSAGE + RECOVERY_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP;
+	String xbeeData = ReadFromSerial();
+	if (xbeeData != "")
+		ParseMessage(xbeeData);
 
-void ParseReceivedMessage(String Message) {
-  if (Message[1] == STATE) {    //only valid message we can receive is a state change
-    SwitchState(SubstringToInt(Message, 2, Message.length()-2));
-  }
+	if (state == 0) {
+
+	}
+	else if (state == 1) {
+		/*
+	  //read from i2C bus
+		Wire.requestFrom(slaveNum, 6); //request 6 bytes from slave device
+		String I2CData = "";
+		while (Wire.available()) {  //slave may send less than requested
+		  char temp = Wire.read();   //receive a byte as a char
+		  I2CData += temp;       // add char to data package
+		}
+		if (I2CData != "") {
+			outgoingData += INSTR_SOURCE;
+		}
+		if (outgoingData == ""){
+			outgoingData = "disInstrError"; //  add disabled instr arduino error to dataPackage if bus empty
+		}
+		*/
+	}
+	else if (state == 2) {
+
+	}
+	Serial.print(outgoingData);
 }
 
 void SwitchState(int stateNumber) {
-  state = static_cast<RecoveryState>(stateNumber);
-  switch(state) {
-    case 1:
-      digitalWrite(instrRelayPin, LOW);
-      digitalWrite(stratRelayPin, LOW);
-      break;
-    case 2: 
-      digitalWrite(instrRelayPin, HIGH);
-      digitalWrite(stratRelayPin, LOW);
-      break;
-    case 3:
-      digitalWrite(instrRelayPin, HIGH);
-      digitalWrite(stratRelayPin, HIGH);
-      break; 
-  }
+	
+	switch (stateNumber) {
+	case 0:
+		state = Idle;
+		digitalWrite(instrRelayPin, LOW);
+		digitalWrite(stratRelayPin, LOW);
+		break;
+	case 1:
+		state = Active;
+		digitalWrite(instrRelayPin, HIGH);
+		digitalWrite(stratRelayPin, LOW);
+		break;
+	case 2:
+		state = Armed;
+		digitalWrite(instrRelayPin, HIGH);
+		digitalWrite(stratRelayPin, HIGH);
+		break;
+	}
 }
 
 int SubstringToInt(String string, int intBegin, int intEnd) {
-  return string.substring(intBegin, intEnd+1).toInt();
+	return string.substring(intBegin, intEnd + 1).toInt();
 }
 
+void ParseMessage(String data) {
+
+	char messageType = data[1];
+	char messageSource = data[2];
+
+	if (messageType == ERROR_MESSAGE) {
+		//TODO: Handle Error Logic
+	}
+	else if (messageType == DATA_MESSAGE) {
+		if (messageSource == TRANSPONDER_SOURCE) {
+			char transponderMessage = data[3];
+			if (transponderMessage == STATE) {
+				int stateMessage = 4;
+				SwitchState(ParseInt(data, &stateMessage));
+			}
+		}
+	}
+}
+
+int ParseInt(String data, int* startChar) {
+	return (int)ParseFloat(data, startChar);
+}
+
+/*
+Reads chars in a string up to the stop indicator and converts to float
+@param data: the string containing the number
+@param startChar, the index of the first digit (inclusive)
+*/
+float ParseFloat(String data, int* startChar) {
+	String out = "";
+	while (data[*startChar] != DATA_STOP) {
+		out += data[*startChar];
+		(*startChar)++;
+	}
+	return out.toFloat();
+}
