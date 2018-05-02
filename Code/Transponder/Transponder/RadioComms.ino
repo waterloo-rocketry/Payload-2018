@@ -30,4 +30,31 @@ void SendNewState() {
 	Serial.print(message); 
 }
 
+void GetMessageFromRadio() {
+	while (Serial.available()) {
+		String message = ReadFromSerial();
+		if (message != "") {
+			MessageReceived = true;
+			if (CubesatConnected == false) {
+				CubesatConnected = true;
+				RefreshLCD();
+			}
+			ParseMessage(message);
+			
+		}
+	}
+}
 
+void CheckForConnectivity() {
+	if (MessageReceived == false) {
+		if (CubesatConnected == true) {
+			CubesatConnected = false;
+			LowPowerState = OFF;
+			ActiveState = OFF;
+			ArmedState = OFF;
+
+			RefreshLCD();
+		}
+	}
+	MessageReceived = false;
+}

@@ -79,6 +79,9 @@ typedef void *__builtin_va_list;
 #define pgm_read_ptr(address_short)   short()
 
 #include "Transponder.ino"
+#include "ButtonLogic.ino"
 #include "RadioComms.ino"
+#include "RefreshStates.ino"
+#include "UpdateStoredData.ino"
 #endif
 #endif
