@@ -1,6 +1,7 @@
-#define AMBIENT_LIGHT_PIN 14
+#define AMBIENT_LIGHT_PIN A0
 
 #define THERM_1_PIN 15
 #define THERM_2_PIN 16
 #define THERM_3_PIN 17
 
+#define SLAVE_NUMBER 9

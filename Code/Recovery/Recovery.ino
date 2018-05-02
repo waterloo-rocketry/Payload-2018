@@ -6,6 +6,7 @@
 #include "RadioMessages.h"
 #include <Wire.h>
 #include <SoftwareSerial.h>
+#include "PinRefs.h"
 
 enum RecoveryState {
 	Idle,
@@ -14,23 +15,31 @@ enum RecoveryState {
 };
 
 RecoveryState state;
-SoftwareSerial mySerial(2, 3);
+String i2cData = "";
 
 void setup() {
 	pinMode(stratSoftSerialPin, INPUT);
 	pinMode(stratRelayPin, OUTPUT);
 	pinMode(instrRelayPin, OUTPUT);
 
-	SwitchState(1);
+	
 	pinMode(LED_BUILTIN, OUTPUT);
 
 	// initialize serial and wire:
-	Wire.begin();//join i2c bus, address optional for master
-	mySerial.begin(9600);
+	Wire.begin(SLAVE_NUMBER);//join i2c bus, address optional for master
+	Wire.onReceive(ReceivedMessage);
 	Serial.begin(9600);
-	// reserve 200 bytes for the xbeeIn:
 	state = Idle;
+	SwitchState(0);
 }
+
+void ReceivedMessage(int bytes) {
+	while (Wire.available())
+	{
+		i2cData += (char)Wire.read();
+	}
+}
+
 
 void loop() {
 	delay(1000);
@@ -39,8 +48,13 @@ void loop() {
 	if (state == Idle) newState = 0;
 	else if (state == Active) newState = 1;
 	else if (state == Armed) newState = 2;
-	else return;
-	String outgoingData = String(MESSAGE_BEGIN) + DATA_MESSAGE + RECOVERY_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP;
+	//else return;
+	//String outgoingData = i2cData;
+	//i2cData = "";
+	Serial.print(String(MESSAGE_BEGIN) + DATA_MESSAGE + RECOVERY_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP);
+	Serial.print(i2cData);
+	i2cData = "";
+
 	String xbeeData = ReadFromSerial();
 	if (xbeeData != "")
 		ParseMessage(xbeeData);
@@ -68,7 +82,6 @@ void loop() {
 	else if (state == 2) {
 
 	}
-	Serial.print(outgoingData);
 }
 
 void SwitchState(int stateNumber) {

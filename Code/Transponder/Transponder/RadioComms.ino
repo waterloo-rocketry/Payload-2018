@@ -27,7 +27,7 @@ void SendNewState() {
 	else return;
 
 	String message = String(MESSAGE_BEGIN) + DATA_MESSAGE + TRANSPONDER_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP;
-	Serial.print(message);
+	Serial.print(message); 
 }
 
 

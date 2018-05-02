@@ -55,7 +55,7 @@ LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 float thermData[3] = { 0,0,0 };
 
 //Light sensor
-float lightValue = 0;
+int lightValue = 0;
 
 //Accelerometer
 float accData[3] = { 0,0,0 };
@@ -107,42 +107,33 @@ void loop() {
 	RightButtonState = digitalRead(RightButton);
 	SelectButtonState = digitalRead(SelectButton);
 
-	if (LeftButtonState == HIGH && !LeftPressed) {
+	if (LeftButtonState == HIGH) {
+		
 		LeftPressed = true;
 		switchDisplayState(false);
+		delay(500);
 	}
 	if (LeftButtonState == LOW) LeftPressed = false;
 
-	if (RightButtonState == HIGH && !RightPressed) {
+	if (RightButtonState == HIGH ) {
+		
 		RightPressed = true;
 		switchDisplayState(true);
+		delay(500);
 	}
 	if (RightButtonState == LOW) RightPressed = false;
 
-	if (SelectButtonState == HIGH && !SelectPressed) {
+	if (SelectButtonState == HIGH) {
+		
 		SelectPressed = true;
 		ChangeCubesatMode();
+		delay(500);
 	}
 	if (SelectButtonState == LOW) SelectPressed = false;
 
 	if (millis() - LastConnectionTimer > 1000) {
 		LastConnectionTimer = millis();
 		GetMessageFromRadio();
-	}
-}
-
-void GetMessageFromRadio() {
-	String message = ReadFromSerial();
-
-	if (message != "") {
-		ParseMessage(message);
-		LastConnectionTimer = millis();
-		if (CubesatConnected == false) {
-			CubesatConnected = true;
-			if (TransponderState == LowPowerMode) CreateLowPowerMode();
-			if (TransponderState == ActiveMode) CreateActiveMode();
-			if (TransponderState == ArmedMode) CreateArmedMode();
-		}
 	}
 	if (millis() - LastConnectionTimer > 5000) {
 		if (CubesatConnected == true) {
@@ -158,7 +149,26 @@ void GetMessageFromRadio() {
 	}
 }
 
+void GetMessageFromRadio() {
+	//lcd.print("READING");
+	while (Serial.available()) {
+		String message = ReadFromSerial();
+		//lcd.print(message);
+		if (message != "") {
+			ParseMessage(message);
+			LastConnectionTimer = millis();
+			if (CubesatConnected == false) {
+				CubesatConnected = true;
+				if (TransponderState == LowPowerMode) CreateLowPowerMode();
+				if (TransponderState == ActiveMode) CreateActiveMode();
+				if (TransponderState == ArmedMode) CreateArmedMode();
+			}
+		}
+	}
+}
+
 void ParseMessage(String data) {
+	//lcd.print(data);
 	char messageType = data[1];
 	char messageSource = data[2];
 
@@ -167,6 +177,7 @@ void ParseMessage(String data) {
 	}
 	else if (messageType == DATA_MESSAGE) {
 		if (messageSource == INSTR_SOURCE) {
+			//lcd.print("INSTR");
 			char instrMessage = data[3];
 			if (instrMessage == THERMISTOR) {
 				int* startChar = (int*)4;
@@ -176,8 +187,9 @@ void ParseMessage(String data) {
 				UpdateThermistorData(thermistorNumber, thermistorData);
 			}
 			else if (instrMessage == AMBIENT_LIGHT) {
+				lcd.print(data);
 				int* startChar = (int*)4;
-				float lightData = ParseFloat(data, startChar);
+				int lightData = ParseInt(data, startChar);
 				UpdateLightData(lightData);
 			}
 			else if (instrMessage == ACCELEROMETER) {
@@ -238,8 +250,9 @@ void UpdateThermistorData(int thermistorNumber, float data) {
 	LogToSD(String(thermData[0]) + ", " + thermData[1] + ", " + thermData[2], THERM_DATA_FILENAME + String(fileUID) + ".csv");
 }
 
-void UpdateLightData(float data) {
+void UpdateLightData(int data) {
 	lightValue = data;
+	if (TransponderState == AltitudeData) CreateAltitudeData();
 	LogToSD(String(data), LIGHT_DATA_FILENAME + String(fileUID) + ".csv");
 }
 
@@ -434,6 +447,7 @@ void CreateAltitudeData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(ALTITUDE);
+	lcd.print(lightValue);
 	//TODO: Convert pressure to alt data
 }
 
