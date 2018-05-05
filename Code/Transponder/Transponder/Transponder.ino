@@ -63,6 +63,7 @@ float gyroData[3] = { 0,0,0 };
 
 //Pressure sensor
 float pressureData = 0;
+float presTempData = 0;
 
 //GPS
 float gpsData[2] = { 0,0 };
@@ -129,14 +130,16 @@ void ParseMessage(String data) {
 				int startChar = 4;
 				int accNumber = ParseInt(data, &startChar);
 				startChar++;
-				float accDataX = ParseFloat(data, &startChar);
+				accData[0] = ParseFloat(data, &startChar);
 				startChar++;
-				float accDataY = ParseFloat(data, &startChar);
+				accData[1] = ParseFloat(data, &startChar);
 				startChar++;
-				float accDataZ = ParseFloat(data, &startChar);
-				UpdateAccData(accNumber, accDataX, accDataY, accDataZ);
+				accData[2] = ParseFloat(data, &startChar);
+				RefreshLCD();
+				//UpdateAccData(accNumber, accDataX, accDataY, accDataZ);
 			}
 			else if (instrMessage == GYROSCOPE) {
+				/*
 				int startChar = 4;
 				int gyroNumber = ParseInt(data, &startChar);
 				startChar++;
@@ -146,11 +149,14 @@ void ParseMessage(String data) {
 				startChar++;
 				float gyroDataZ = ParseFloat(data, &startChar);
 				UpdateGyroData(gyroNumber, gyroDataX, gyroDataY, gyroDataZ);
+				*/
 			}
 			else if (instrMessage == PRESSURE_SENSOR) {
 				int startChar = 4;
-				float pressureData = ParseFloat(data, &startChar);
-				UpdatePressureData(pressureData);
+				float presData = ParseFloat(data, &startChar);
+				startChar++;
+				float tempData = ParseFloat(data, &startChar);
+				UpdatePressureData(presData, tempData);
 			}
 			else if (instrMessage == GPS) {
 				int startChar = 4;
@@ -333,5 +339,7 @@ float ParseFloat(String data, int* startChar) {
 		out += data[*startChar];
 		(*startChar)++;
 	}
+	//lcd.print(out);
+	//lcd.print(out.toFloat());
 	return out.toFloat();
 }

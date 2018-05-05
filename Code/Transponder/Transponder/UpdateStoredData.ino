@@ -23,9 +23,11 @@ void UpdateGyroData(int gyroNumber, float dataX, float dataY, float dataZ) {
 	LogToSD(String(gyroData[0]) + ", " + gyroData[1] + ", " + gyroData[2], GYRO_DATA_FILENAME + String(fileUID) + ".csv");
 }
 
-void UpdatePressureData(float data) {
-	pressureData = data;
-	LogToSD(String(data), PRESSURE_DATA_FILENAME + String(fileUID) + ".csv");
+void UpdatePressureData(float presData, float tempData) {
+	pressureData = presData;
+	presTempData = tempData;
+	RefreshLCD();
+	//LogToSD(String(data), PRESSURE_DATA_FILENAME + String(fileUID) + ".csv");
 }
 
 void UpdateGPSData(float GPSX, float GPSY) {

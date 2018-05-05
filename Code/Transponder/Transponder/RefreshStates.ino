@@ -23,7 +23,7 @@
 		RefreshFlightData();
 		break;
 	case SpeedData:
-		RefreshSpeedData;
+		RefreshSpeedData();
 		break;
 	default:
 		break;
@@ -86,9 +86,11 @@ void RefreshAltitudeData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(ALTITUDE);
-	//lcd.setCursor(0, 1);
-	//lcd.print(lightValue);
-	//TODO: Convert pressure to alt data
+	lcd.setCursor(0, 1);
+
+	float result = (((pow((1013.25/(pressureData*.01)),(1/5.257))-1)*(presTempData*.01+273.15)) / 0.0065) * 3.28084;
+	lcd.print(result);
+
 }
 
 void RefreshTemperatureData() {

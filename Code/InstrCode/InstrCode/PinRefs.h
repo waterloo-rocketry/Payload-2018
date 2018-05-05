@@ -5,3 +5,5 @@
 #define THERM_3_PIN 17
 
 #define SLAVE_NUMBER 9
+
+#define PRESSURE_SENSOR_ADDRESS 0xEE

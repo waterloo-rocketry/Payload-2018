@@ -30,7 +30,7 @@ void setup() {
 	Wire.onReceive(ReceivedMessage);
 	Serial.begin(9600);
 	state = Idle;
-	SwitchState(0);
+	SwitchState(1);
 }
 
 void ReceivedMessage(int bytes) {
@@ -43,17 +43,7 @@ void ReceivedMessage(int bytes) {
 
 void loop() {
 	delay(1000);
-	int newState;
-
-	if (state == Idle) newState = 0;
-	else if (state == Active) newState = 1;
-	else if (state == Armed) newState = 2;
-	//else return;
-	//String outgoingData = i2cData;
-	//i2cData = "";
-	Serial.print(String(MESSAGE_BEGIN) + DATA_MESSAGE + RECOVERY_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP);
-	Serial.print(i2cData);
-	i2cData = "";
+	SendDataOverRadio();
 
 	String xbeeData = ReadFromSerial();
 	if (xbeeData != "")
@@ -83,6 +73,7 @@ void loop() {
 
 	}
 }
+
 
 void SwitchState(int stateNumber) {
 	
