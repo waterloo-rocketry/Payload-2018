@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstrCode", "InstrCode\InstrCode.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SparkFun_LSM6DS3_Arduino_Library-master", "C:\Users\paula\OneDrive\Documents\Arduino\libraries\SparkFun_LSM6DS3_Arduino_Library-master\SparkFun_LSM6DS3_Arduino_Library-master.vcxitems", "{E246272E-1AAF-47B9-849B-AA50B92FEB8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
