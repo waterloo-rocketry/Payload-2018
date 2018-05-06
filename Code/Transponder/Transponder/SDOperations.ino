@@ -1,4 +1,6 @@
-﻿int fileUID;
+﻿#include "SDFileHeaders.h"
+
+int fileUID;
 bool FileSuccess = false;
 
 void InitializeSDFile() {
@@ -40,25 +42,25 @@ void WriteLastDataToSD() {
 	if (!FileSuccess) return;
 	String fileName = "Data" + (String)fileUID + ".csv";
 	File dataFile = SD.open(fileName, FILE_WRITE);
-	dataFile.print(lastSample);
+	dataFile.print(sampleTime);
 	dataFile.print(",");
-	dataFile.print(lastLight);
+	dataFile.print(lightValue);
 	dataFile.print(",");
-	dataFile.print(lastPressure);
+	dataFile.print(pressureData);
 	dataFile.print(",");
-	dataFile.print(lastPresTemp);
+	dataFile.print(presTempData);
 	dataFile.print(",");
-	dataFile.print(lastAccX);
+	dataFile.print(accDataX);
 	dataFile.print(",");
-	dataFile.print(lastAccY);
+	dataFile.print(accDataY);
 	dataFile.print(",");
-	dataFile.print(lastAccZ);
+	dataFile.print(accDataZ);
 	dataFile.print(",");
-	dataFile.print(lastGyroX);
+	dataFile.print(gyroDataX);
 	dataFile.print(",");
-	dataFile.print(lastGyroY);
+	dataFile.print(gyroDataY);
 	dataFile.print(",");
-	dataFile.print(lastGyroZ);
+	dataFile.print(gyroDataZ);
 	dataFile.print("\n");
 	dataFile.close();
 }

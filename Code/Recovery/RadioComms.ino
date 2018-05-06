@@ -11,7 +11,7 @@ String ReadFromSerial() {
 	return inString;
 }
 
-void SendDataOverRadio() {
+void SendStateDataOverRadio() {
 	Serial.print(MESSAGE_BEGIN);	//Send the current state of the cubesat to the ground
 	Serial.print(DATA_MESSAGE);
 	Serial.print(RECOVERY_SOURCE);
@@ -19,7 +19,18 @@ void SendDataOverRadio() {
 	Serial.print((int)state);
 	Serial.print(DATA_STOP);
 	Serial.print(MESSAGE_STOP);
+}
 
-	Serial.print(i2cData);	//Pass on all data sent from instr board
+void SendInstrDataOverRadio() {
+	if (i2cData == "") {
+		Serial.print(MESSAGE_BEGIN);
+		Serial.print(ERROR_MESSAGE);
+		Serial.print(RECOVERY_SOURCE);
+		Serial.print(INSTR_SOURCE);
+		Serial.print(MESSAGE_STOP);
+	}
+	for (int i = 0; i < i2cData.length(); i++) {
+		Serial.print(i2cData[i]);	//Pass on all data sent from instr board
+	}
 	i2cData = "";	//clear all data from instr board
 }

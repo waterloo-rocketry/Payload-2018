@@ -2,19 +2,13 @@
 
 String ReadFromSerial() {
 	String inString = "";
-	while (Serial.available()) {
-		char inChar = (char)Serial.read();
-		//inString += inChar;
-		if (inChar == MESSAGE_BEGIN || inString != "") inString += inChar; //search for message begin
-		if (inString != "" && inChar == MESSAGE_STOP) break;
-	}
-	/*
-	if (inString != "") {
-		lcd.clear();
-		lcd.print(inString);
-	}
-	*/
-	//lcd.print(inString);
+	char inChar;
+	do {
+		if (!Serial.available()) return "";
+		inChar = (char)Serial.read();
+		if (inChar != MESSAGE_STOP && (inChar == MESSAGE_BEGIN || inString != "")) inString += inChar; //search for message begin
+	} while (inChar != MESSAGE_STOP);
+
 	return inString;
 }
 

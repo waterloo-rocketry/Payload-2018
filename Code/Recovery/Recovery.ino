@@ -43,16 +43,16 @@ void ReceivedMessage(int bytes) {
 
 void loop() {
 	delay(1000);
-	SendDataOverRadio();
-
 	String xbeeData = ReadFromSerial();
 	if (xbeeData != "")
 		ParseMessage(xbeeData);
 
 	if (state == 0) {
-
+		SendStateDataOverRadio();
 	}
 	else if (state == 1) {
+		SendStateDataOverRadio();
+		SendInstrDataOverRadio();
 		/*
 	  //read from i2C bus
 		Wire.requestFrom(slaveNum, 6); //request 6 bytes from slave device
@@ -70,7 +70,8 @@ void loop() {
 		*/
 	}
 	else if (state == 2) {
-
+		SendStateDataOverRadio();
+		SendInstrDataOverRadio();
 	}
 }
 

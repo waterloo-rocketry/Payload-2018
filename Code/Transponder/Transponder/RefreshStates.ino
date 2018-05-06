@@ -88,9 +88,13 @@ void RefreshAltitudeData() {
 	lcd.print(ALTITUDE);
 	lcd.setCursor(0, 1);
 
-	float result = (((pow((1013.25/(pressureData*.01)),(1/5.257))-1)*(presTempData*.01+273.15)) / 0.0065) * 3.28084;
-	lcd.print(result);
-
+	if (presTempData == 0 || pressureData == 0) {
+		lcd.print("NODATA");
+	}
+	else {
+		altitude = (((pow((1013.25 / (pressureData*.01)), (1 / 5.257)) - 1)*(presTempData*.01 + 273.15)) / 0.0065) * 3.28084;
+		lcd.print(altitude);
+	}
 }
 
 void RefreshTemperatureData() {
@@ -105,7 +109,7 @@ void RefreshFlightData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(DEPLOY);
-	if (!CubesatConnected) lcd.print("?");
+	//if (!CubesatConnected) lcd.print("?");
 	if (lightValue > lightDeployThreshold) lcd.print("Y");
 	else lcd.print("N");
 	//TODO: Determine if deployment event has happened
@@ -120,12 +124,16 @@ void RefreshSpeedData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(VERTSPEED);
+	lcd.setCursor(0, 1);
+	lcd.print(sampleTime);
 	//TODO: Determine vert speed
+	/*
 	lcd.setCursor(0, 1);
 	lcd.print(ACCELERATION);
-	lcd.print(accData[0]);
+	lcd.print(accDataX);
 	lcd.print(" ");
-	lcd.print(accData[1]);
+	lcd.print(accDataY);
 	lcd.print(" ");
-	lcd.print(accData[2]);
+	lcd.print(accDataZ);
+	*/
 }

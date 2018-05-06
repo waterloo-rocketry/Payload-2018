@@ -20,6 +20,7 @@
 #define GYROSCOPE 'R'
 #define PRESSURE_SENSOR 'P'
 #define GPS 'G'
+#define SAMPLE_TIME 'E'
 
 #define DATA_STOP 'C'	//sent after each piece of data
 

@@ -82,6 +82,7 @@ typedef void *__builtin_va_list;
 #include "ButtonLogic.ino"
 #include "RadioComms.ino"
 #include "RefreshStates.ino"
+#include "SDOperations.ino"
 #include "UpdateStoredData.ino"
 #endif
 #endif

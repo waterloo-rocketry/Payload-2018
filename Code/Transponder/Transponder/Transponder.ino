@@ -21,7 +21,8 @@ enum DisplayStateOptions {
 	AltitudeData,
 	TemperatureData,
 	FlightData,
-	SpeedData
+	SpeedData,
+	ErrorData
 };
 
 enum ModeState {
@@ -56,17 +57,26 @@ int lightValue = 0;
 const int lightDeployThreshold = 5;
 
 //Accelerometer
-float accData[3] = { 0,0,0 };
+float accDataX = 0;
+float accDataY = 0;
+float accDataZ = 0;
 
 //Gyroscope
-float gyroData[3] = { 0,0,0 };
+float gyroDataX = 0;
+float gyroDataY = 0;
+float gyroDataZ = 0;
+
+//float gyroData[3] = { 0,0,0 };
 
 //Pressure sensor
 float pressureData = 0;
 float presTempData = 0;
+float altitude = 0;
 
 //GPS
 float gpsData[2] = { 0,0 };
+
+int sampleTime = 0;	//last time data was sampled from the cubesat
 
 int fileUID;	//append this to filenames to avoid overwriting files
 
@@ -88,10 +98,7 @@ void setup() {
 	RadioTimer.every(1000, GetMessageFromRadio);
 	RadioTimer.every(5000, CheckForConnectivity);
 
-	//Initialize SD Card
-	if (!SD.begin()) {
-		return;
-	}
+	InitializeSDFile();
 	
 }
 
@@ -103,7 +110,6 @@ void loop() {
 }
 
 void ParseMessage(String data) {
-	//lcd.print(data);
 	char messageType = data[1];
 	char messageSource = data[2];
 
@@ -112,30 +118,43 @@ void ParseMessage(String data) {
 	}
 	else if (messageType == DATA_MESSAGE) {
 		if (messageSource == INSTR_SOURCE) {
-			//lcd.print("INSTR");
 			char instrMessage = data[3];
+			int startChar;
+			if (instrMessage == SAMPLE_TIME) {
+				startChar = 4;
+				sampleTime = ParseInt(data, &startChar);
+				WriteLastDataToSD();
+				RefreshLCD();
+			}
 			if (instrMessage == THERMISTOR) {
-				int startChar = 4;
+				/*
+				startChar = 4;
 				int thermistorNumber = ParseInt(data, &startChar);
 				startChar++;
 				float thermistorData = ParseFloat(data, &startChar);
 				UpdateThermistorData(thermistorNumber, thermistorData);
+				*/
 			}
 			else if (instrMessage == AMBIENT_LIGHT) {
-				int startChar = 4;
-				int lightData = ParseInt(data, &startChar);
-				UpdateLightData(lightData);
+				
+				startChar = 4;
+				lightValue = ParseInt(data, &startChar);
+				RefreshLCD();
+				//UpdateLightData(lightData);
+				
 			}
 			else if (instrMessage == ACCELEROMETER) {
-				int startChar = 4;
-				int accNumber = ParseInt(data, &startChar);
+				
+				startChar = 4;
+				//int accNumber = ParseInt(data, &startChar);
+				//startChar++;
+				accDataX = ParseFloat(data, &startChar);
 				startChar++;
-				accData[0] = ParseFloat(data, &startChar);
+				accDataY = ParseFloat(data, &startChar);
 				startChar++;
-				accData[1] = ParseFloat(data, &startChar);
-				startChar++;
-				accData[2] = ParseFloat(data, &startChar);
+				accDataZ = ParseFloat(data, &startChar);
 				RefreshLCD();
+				
 				//UpdateAccData(accNumber, accDataX, accDataY, accDataZ);
 			}
 			else if (instrMessage == GYROSCOPE) {
@@ -152,18 +171,23 @@ void ParseMessage(String data) {
 				*/
 			}
 			else if (instrMessage == PRESSURE_SENSOR) {
-				int startChar = 4;
-				float presData = ParseFloat(data, &startChar);
+				
+				startChar = 4;
+				pressureData = ParseFloat(data, &startChar);
 				startChar++;
-				float tempData = ParseFloat(data, &startChar);
-				UpdatePressureData(presData, tempData);
+				presTempData = ParseFloat(data, &startChar);
+				RefreshLCD();
+				//UpdatePressureData(presData, tempData);
+				
 			}
 			else if (instrMessage == GPS) {
-				int startChar = 4;
+				/*
+				startChar = 4;
 				float GPSX = ParseFloat(data, &startChar);
 				startChar++;
 				float GPSY = ParseFloat(data, &startChar);
 				UpdateGPSData(GPSX, GPSY);
+				*/
 			}
 		}
 		else if (messageSource == RECOVERY_SOURCE) {
@@ -335,7 +359,7 @@ Reads chars in a string up to the stop indicator and converts to float
 */
 float ParseFloat(String data, int* startChar) {
 	String out = "";
-	while (data[*startChar] != DATA_STOP) {
+	while (data[*startChar] != DATA_STOP && *startChar < data.length()) {
 		out += data[*startChar];
 		(*startChar)++;
 	}
