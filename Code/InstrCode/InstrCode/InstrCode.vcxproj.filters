@@ -31,5 +31,19 @@
     <ClInclude Include="SDFileHeaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sensorData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thermistor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sensorData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thermistor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -75,11 +75,11 @@ void RefreshArmedMode() {
 void RefreshGPSData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
-	lcd.print(GPS);
+	lcd.print(GPSCOORDS);
 	lcd.setCursor(0, 1);
-	lcd.print(gpsData[0]);
+	lcd.print(gpsLat);
 	lcd.print(" ");
-	lcd.print(gpsData[1]);
+	lcd.print(gpsLong);
 }
 
 void RefreshAltitudeData() {

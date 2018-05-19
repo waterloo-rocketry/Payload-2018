@@ -14,12 +14,12 @@
 #define TRANSPONDER_SOURCE 'T'
 
 //Sensor defs
-#define THERMISTOR 'T'
+#define TEMPSENSOR 'T'
 #define AMBIENT_LIGHT 'L'
 #define ACCELEROMETER 'A'
 #define GYROSCOPE 'R'
 #define PRESSURE_SENSOR 'P'
-#define GPS 'G'
+#define GPSCOORDS 'G'
 #define SAMPLE_TIME 'E'
 
 #define DATA_STOP 'C'	//sent after each piece of data

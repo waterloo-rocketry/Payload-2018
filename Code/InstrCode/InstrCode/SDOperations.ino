@@ -1,4 +1,5 @@
-﻿int fileUID;
+﻿/*
+int fileUID;
 bool FileSuccess = false;
 
 void InitializeSDFile() {
@@ -62,3 +63,4 @@ void WriteLastDataToSD() {
 	dataFile.print("\n");
 	dataFile.close();
 }
+*/

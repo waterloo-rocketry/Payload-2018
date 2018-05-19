@@ -74,11 +74,10 @@ float presTempData = 0;
 float altitude = 0;
 
 //GPS
-float gpsData[2] = { 0,0 };
+float gpsLat = 0;
+float gpsLong = 0;
 
 int sampleTime = 0;	//last time data was sampled from the cubesat
-
-int fileUID;	//append this to filenames to avoid overwriting files
 
 Timer RadioTimer;
 
@@ -92,7 +91,6 @@ void setup() {
 	TransponderState = LowPowerMode;
 	RefreshLCD();
 
-	fileUID = random(32767);
 	Serial.begin(9600);
 	
 	RadioTimer.every(1000, GetMessageFromRadio);
@@ -180,14 +178,12 @@ void ParseMessage(String data) {
 				//UpdatePressureData(presData, tempData);
 				
 			}
-			else if (instrMessage == GPS) {
-				/*
+			else if (instrMessage == GPSCOORDS) {
 				startChar = 4;
-				float GPSX = ParseFloat(data, &startChar);
+				gpsLat = ParseFloat(data, &startChar);
 				startChar++;
-				float GPSY = ParseFloat(data, &startChar);
-				UpdateGPSData(GPSX, GPSY);
-				*/
+				gpsLong = ParseFloat(data, &startChar);
+				RefreshLCD();
 			}
 		}
 		else if (messageSource == RECOVERY_SOURCE) {

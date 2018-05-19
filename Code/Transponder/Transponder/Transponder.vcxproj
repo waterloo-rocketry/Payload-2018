@@ -80,6 +80,7 @@
     <None Include="ButtonLogic.ino" />
     <None Include="RadioComms.ino" />
     <None Include="RefreshStates.ino" />
+    <None Include="SDOperations.ino" />
     <None Include="Transponder.ino">
       <FileType>CppCode</FileType>
     </None>
@@ -88,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="PinRefs.h" />
     <ClInclude Include="RadioMessages.h" />
+    <ClInclude Include="SDFileHeaders.h" />
     <ClInclude Include="transponderStrings.h" />
     <ClInclude Include="__vm\.Transponder.vsarduino.h" />
   </ItemGroup>

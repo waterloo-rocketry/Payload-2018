@@ -25,5 +25,8 @@
     <ClInclude Include="RadioMessages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PinRefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

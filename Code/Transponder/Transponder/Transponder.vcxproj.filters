@@ -17,6 +17,10 @@
   <ItemGroup>
     <None Include="Transponder.ino" />
     <None Include="RadioComms.ino" />
+    <None Include="ButtonLogic.ino" />
+    <None Include="RefreshStates.ino" />
+    <None Include="UpdateStoredData.ino" />
+    <None Include="SDOperations.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.Transponder.vsarduino.h">
@@ -29,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RadioMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFileHeaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
