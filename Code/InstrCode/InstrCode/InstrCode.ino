@@ -5,6 +5,12 @@
 */
 //#define GPSECHO  true
 //#include <Adafruit_GPS.h>
+#include <SysCall.h>
+#include <SdFatConfig.h>
+#include <SdFat.h>
+#include <MinimumSerial.h>
+#include <FreeStack.h>
+#include <BlockDriver.h>
 #include <NMEAGPS.h>
 #include <GPSport.h>
 #include <Streamers.h>
@@ -15,14 +21,14 @@
 #include <Wire.h>
 #include <MS5xxx.h>
 #include "Timer.h"
-//#include <SPI.h>
-//#include <SD.h>
-//#include "SDFileHeaders.h"
-//#include <SoftwareSerial.h>
+#include "SDFileHeaders.h"
+
 //#include "sensorData.h"
 //#include "thermistor.h"
 MS5xxx sensor(&Wire);
 LSM6DS3 IMU1(I2C_MODE, 0x6A);
+LSM6DS3 IMU2(I2C_MODE, 0x6B);
+
 static NMEAGPS  gps;
 static gps_fix  fix;
 
@@ -44,14 +50,21 @@ int lastLight = 0;
 float lastPressure = 0; //last pressure measurement taken (in pA)
 float lastPresTemp = 0;	//last temperature measurement taken from the pressure sensor (in 0.01C)
 
-float lastAccX = 0;
-float lastAccY = 0;
-float lastAccZ = 0;
+float lastAcc0X = 0;
+float lastAcc0Y = 0;
+float lastAcc0Z = 0;
 
-float lastGyroX = 0;
-float lastGyroY = 0;
-float lastGyroZ = 0;
+float lastGyro0X = 0;
+float lastGyro0Y = 0;
+float lastGyro0Z = 0;
 
+float lastAcc1X = 0;
+float lastAcc1Y = 0;
+float lastAcc1Z = 0;
+
+float lastGyro1X = 0;
+float lastGyro1Y = 0;
+float lastGyro1Z = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -64,8 +77,11 @@ void setup() {
 	gpsPort.begin(9600);
 
 	//Setup IMU's
+	IMU1.settings.accelRange = 16;
+	IMU2.settings.accelRange = 4;
 	IMU1.begin();
-	//InitializeSDFile();
+	IMU2.begin();
+	InitializeSDFile();
 	RadioTimer.every(1000, SendLastData);
 
 }
@@ -73,17 +89,13 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-
-	//ReadFromGPS();
 	RadioTimer.update();
-	// read data from the GPS in the 'main loop'
-
-
+	lastSample = millis();
 	GetGPSData();
 	GetPressureData();
 	GetIMUData();
 	GetAmbientLightData();
-	//GetGPSData();
+	WriteLastDataToSD();
 }
 void SendGPSData() {
 	Wire.beginTransmission(SLAVE_NUMBER);
@@ -119,20 +131,23 @@ void GetPressureData() {
 }
 
 void GetIMUData() {
-	lastAccX = IMU1.readFloatAccelX();
-	lastAccY = IMU1.readFloatAccelY();
-	lastAccZ = IMU1.readFloatAccelZ();
+	lastAcc0X = IMU1.readFloatAccelX();
+	lastAcc0Y = IMU1.readFloatAccelY();
+	lastAcc0Z = IMU1.readFloatAccelZ();
 
-	lastGyroX = IMU1.readFloatGyroX();
-	lastGyroY = IMU1.readFloatGyroY();
-	lastGyroZ = IMU1.readFloatGyroZ();;
+	lastGyro0X = IMU1.readFloatGyroX();
+	lastGyro0Y = IMU1.readFloatGyroY();
+	lastGyro0Z = IMU1.readFloatGyroZ();
+
+	lastAcc1X = IMU2.readFloatAccelX();
+	lastAcc1Y = IMU2.readFloatAccelY();
+	lastAcc1Z = IMU2.readFloatAccelZ();
+
+	lastGyro1X = IMU2.readFloatGyroX();
+	lastGyro1Y = IMU2.readFloatGyroY();
+	lastGyro1Z = IMU2.readFloatGyroZ();
 }
 
-/*
-float GetThermistorData(int thermistor) {
-	return analogRead(thermistor == 1 ? THERM_1_PIN : thermistor == 2 ? THERM_2_PIN : THERM_3_PIN);
-}
-*/
 void SendTimerData() {
 	Wire.beginTransmission(SLAVE_NUMBER);
 	Wire.print(MESSAGE_BEGIN);
@@ -151,13 +166,11 @@ void SendIMUData() {
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(ACCELEROMETER);
-	//Wire.print("0");
-	//.print(DATA_STOP);
-	Wire.print(lastAccX);
+	Wire.print(lastAcc0X);
 	Wire.print(DATA_STOP);
-	Wire.print(lastAccY);
+	Wire.print(lastAcc0Y);
 	Wire.print(DATA_STOP);
-	Wire.print(lastAccZ);
+	Wire.print(lastAcc0Z);
 	Wire.print(DATA_STOP);
 	Wire.print(MESSAGE_STOP);
 	Wire.endTransmission();
@@ -167,13 +180,11 @@ void SendIMUData() {
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(GYROSCOPE);
-	//Wire.print("0");
-	//Wire.print(DATA_STOP);
-	Wire.print(lastGyroX);
+	Wire.print(lastGyro0X);
 	Wire.print(DATA_STOP);
-	Wire.print(lastGyroY);
+	Wire.print(lastGyro0Y);
 	Wire.print(DATA_STOP);
-	Wire.print(lastGyroZ);
+	Wire.print(lastGyro0Z);
 	Wire.print(DATA_STOP);
 	Wire.print(MESSAGE_STOP);
 

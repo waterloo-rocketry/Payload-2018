@@ -1,19 +1,15 @@
-﻿/*
-int fileUID;
+﻿
 bool FileSuccess = false;
+SdFat SD;
 
 void InitializeSDFile() {
 	if (!SD.begin()) return;
 	FileSuccess = true;
 
-	fileUID = 0;
-	while (SD.exists("Data" + (String)fileUID + ".csv")) {
-		fileUID++;
-	}
+	File dataFile = SD.open(FILE_NAME, FILE_WRITE);
 
-	String fileName = "Data" + (String)fileUID + ".csv";
-	File dataFile = SD.open(fileName, FILE_WRITE);
-
+	//dataFile.print("\n");
+	//dataFile.print("\n");
 	dataFile.print(TIME_HEADER);
 	dataFile.print(",");
 	dataFile.print(LIGHT_HEADER);
@@ -22,25 +18,43 @@ void InitializeSDFile() {
 	dataFile.print(",");
 	dataFile.print(PRESSURE_TEMP_HEADER);
 	dataFile.print(",");
-	dataFile.print(ACC_X_HEADER);
+
+	dataFile.print(ACC_0_X_HEADER);
 	dataFile.print(",");
-	dataFile.print(ACC_Y_HEADER);
+	dataFile.print(ACC_0_Y_HEADER);
 	dataFile.print(",");
-	dataFile.print(ACC_Z_HEADER);
+	dataFile.print(ACC_0_Z_HEADER);
 	dataFile.print(",");
-	dataFile.print(GYRO_X_HEADER);
+	dataFile.print(GYRO_0_X_HEADER);
 	dataFile.print(",");
-	dataFile.print(GYRO_Y_HEADER);
+	dataFile.print(GYRO_0_Y_HEADER);
 	dataFile.print(",");
-	dataFile.print(GYRO_Z_HEADER);
+	dataFile.print(GYRO_0_Z_HEADER);
+	dataFile.print(",");
+
+	dataFile.print(ACC_1_X_HEADER);
+	dataFile.print(",");
+	dataFile.print(ACC_1_Y_HEADER);
+	dataFile.print(",");
+	dataFile.print(ACC_1_Z_HEADER);
+	dataFile.print(",");
+	dataFile.print(GYRO_1_X_HEADER);
+	dataFile.print(",");
+	dataFile.print(GYRO_1_Y_HEADER);
+	dataFile.print(",");
+	dataFile.print(GYRO_1_Z_HEADER);
+	dataFile.print(",");
+
+	dataFile.print(GPS_LAT_HEADER);
+	dataFile.print(",");
+	dataFile.print(GPS_LONG_HEADER);
 	dataFile.print("\n");
 	dataFile.close();
 }
 
 void WriteLastDataToSD() {
 	if (!FileSuccess) return;
-	String fileName = "Data" + (String)fileUID + ".csv";
-	File dataFile = SD.open(fileName, FILE_WRITE);
+	File dataFile = SD.open(FILE_NAME, FILE_WRITE);
 	dataFile.print(lastSample);
 	dataFile.print(",");
 	dataFile.print(lastLight);
@@ -49,18 +63,36 @@ void WriteLastDataToSD() {
 	dataFile.print(",");
 	dataFile.print(lastPresTemp);
 	dataFile.print(",");
-	dataFile.print(lastAccX);
+
+	dataFile.print(lastAcc0X);
 	dataFile.print(",");
-	dataFile.print(lastAccY);
+	dataFile.print(lastAcc0Y);
 	dataFile.print(",");
-	dataFile.print(lastAccZ);
+	dataFile.print(lastAcc0Z);
 	dataFile.print(",");
-	dataFile.print(lastGyroX);
+	dataFile.print(lastGyro0X);
 	dataFile.print(",");
-	dataFile.print(lastGyroY);
+	dataFile.print(lastGyro0Y);
 	dataFile.print(",");
-	dataFile.print(lastGyroZ);
+	dataFile.print(lastGyro0Z);
+	dataFile.print(",");
+
+	dataFile.print(lastAcc1X);
+	dataFile.print(",");
+	dataFile.print(lastAcc1Y);
+	dataFile.print(",");
+	dataFile.print(lastAcc1Z);
+	dataFile.print(",");
+	dataFile.print(lastGyro1X);
+	dataFile.print(",");
+	dataFile.print(lastGyro1Y);
+	dataFile.print(",");
+	dataFile.print(lastGyro1Z);
+	dataFile.print(",");
+
+	dataFile.print(fix.latitude());
+	dataFile.print(",");
+	dataFile.print(fix.longitude());
 	dataFile.print("\n");
 	dataFile.close();
 }
-*/
