@@ -6,10 +6,8 @@ void InitializeSDFile() {
 	if (!SD.begin()) return;
 	FileSuccess = true;
 
-	File dataFile = SD.open(FILE_NAME, FILE_WRITE);
+	File dataFile = SD.open(FILE_NAME, O_CREAT | O_AT_END);
 
-	//dataFile.print("\n");
-	//dataFile.print("\n");
 	dataFile.print(TIME_HEADER);
 	dataFile.print(",");
 	dataFile.print(LIGHT_HEADER);
@@ -31,7 +29,7 @@ void InitializeSDFile() {
 	dataFile.print(",");
 	dataFile.print(GYRO_0_Z_HEADER);
 	dataFile.print(",");
-
+	/*
 	dataFile.print(ACC_1_X_HEADER);
 	dataFile.print(",");
 	dataFile.print(ACC_1_Y_HEADER);
@@ -44,17 +42,18 @@ void InitializeSDFile() {
 	dataFile.print(",");
 	dataFile.print(GYRO_1_Z_HEADER);
 	dataFile.print(",");
-
+	*/
 	dataFile.print(GPS_LAT_HEADER);
 	dataFile.print(",");
 	dataFile.print(GPS_LONG_HEADER);
 	dataFile.print("\n");
 	dataFile.close();
+	delay(3000);
 }
 
 void WriteLastDataToSD() {
 	if (!FileSuccess) return;
-	File dataFile = SD.open(FILE_NAME, FILE_WRITE);
+	File dataFile = SD.open(FILE_NAME, O_AT_END);
 	dataFile.print(lastSample);
 	dataFile.print(",");
 	dataFile.print(lastLight);
@@ -76,7 +75,7 @@ void WriteLastDataToSD() {
 	dataFile.print(",");
 	dataFile.print(lastGyro0Z);
 	dataFile.print(",");
-
+	/*
 	dataFile.print(lastAcc1X);
 	dataFile.print(",");
 	dataFile.print(lastAcc1Y);
@@ -89,10 +88,10 @@ void WriteLastDataToSD() {
 	dataFile.print(",");
 	dataFile.print(lastGyro1Z);
 	dataFile.print(",");
-
 	dataFile.print(fix.latitude());
 	dataFile.print(",");
 	dataFile.print(fix.longitude());
+	*/
 	dataFile.print("\n");
 	dataFile.close();
 }

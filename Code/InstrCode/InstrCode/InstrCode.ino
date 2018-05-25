@@ -89,6 +89,7 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	delay(1000);
 	RadioTimer.update();
 	lastSample = millis();
 	GetGPSData();

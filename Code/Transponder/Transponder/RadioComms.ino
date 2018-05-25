@@ -13,15 +13,19 @@ String ReadFromSerial() {
 }
 
 void SendNewState() {
-	int newState;
+	int newState = 0;
 
-	if (TransponderState == LowPowerMode) newState = 0;
-	else if (TransponderState == ActiveMode) newState = 1;
+	if (TransponderState == StatusMode || TransponderState == EditStatusMode) {
+		if (SelectedStatusState == OFF) newState = 0;
+		else if (SelectedStatusState == ON) newState = 1;
+	}
 	else if (TransponderState == ArmedMode) newState = 2;
-	else return;
 
 	String message = String(MESSAGE_BEGIN) + DATA_MESSAGE + TRANSPONDER_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP;
 	Serial.print(message); 
+
+	SendingData = true;
+	RadioTimer.after(5000, []() -> void {SendingData = false; RefreshLCD(); });
 }
 
 void GetMessageFromRadio() {
@@ -43,8 +47,7 @@ void CheckForConnectivity() {
 	if (MessageReceived == false) {
 		if (CubesatConnected == true) {
 			CubesatConnected = false;
-			LowPowerState = OFF;
-			ActiveState = OFF;
+			StatusState = OFF;
 			ArmedState = OFF;
 
 			RefreshLCD();

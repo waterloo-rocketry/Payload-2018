@@ -14,8 +14,8 @@
 #include <SD.h>
 
 enum DisplayStateOptions {
-	LowPowerMode,
-	ActiveMode,
+	StatusMode,
+	EditStatusMode,
 	ArmedMode,
 	GPSData,
 	AltitudeData,
@@ -27,13 +27,13 @@ enum DisplayStateOptions {
 
 enum ModeState {
 	OFF,
-	SENDING,
 	ON
 };
-String ModeStateStrings[3] = { "OFF", "SENDING", "ON" };
 
-ModeState LowPowerState;
-ModeState ActiveState;
+bool SendingData = false;
+
+ModeState StatusState;
+ModeState SelectedStatusState;
 ModeState ArmedState;
 
 DisplayStateOptions TransponderState;
@@ -81,6 +81,8 @@ int sampleTime = 0;	//last time data was sampled from the cubesat
 
 Timer RadioTimer;
 
+bool blink = false;
+
 // the setup function runs once when you press reset or power the board
 void setup() {
 	pinMode(LeftButton, INPUT);
@@ -88,14 +90,14 @@ void setup() {
 	pinMode(SelectButton, INPUT);
 
 	lcd.begin(16, 2);
-	TransponderState = LowPowerMode;
+	TransponderState = StatusMode;
 	RefreshLCD();
 
 	Serial.begin(9600);
 	
 	RadioTimer.every(1000, GetMessageFromRadio);
 	RadioTimer.every(5000, CheckForConnectivity);
-
+	RadioTimer.every(250, []() -> void {blink = !blink; RefreshLCD(); });
 	InitializeSDFile();
 	
 }
@@ -207,28 +209,24 @@ void ParseMessage(String data) {
 void switchDisplayState(bool increase) {
 	switch (TransponderState)
 	{
-	case LowPowerMode:
+	case StatusMode:
 		if (increase) {
-			TransponderState = ActiveMode;
+			TransponderState = ArmedMode;
 		}
 		else {
 			TransponderState = SpeedData;
 		}
 		break;
-	case ActiveMode:
-		if (increase) {
-			TransponderState = ArmedMode;
-		}
-		else {
-			TransponderState = LowPowerMode;
-		}
+	case EditStatusMode:
+		if (SelectedStatusState == ON) SelectedStatusState = OFF;
+		else if (SelectedStatusState == OFF) SelectedStatusState = ON;
 		break;
 	case ArmedMode:
 		if (increase) {
 			TransponderState = GPSData;
 		}
 		else {
-			TransponderState = ActiveMode;
+			TransponderState = StatusMode;
 		}
 		break;
 	case GPSData:
@@ -265,7 +263,7 @@ void switchDisplayState(bool increase) {
 		break;
 	case SpeedData:
 		if (increase) {
-			TransponderState = LowPowerMode;
+			TransponderState = StatusMode;
 		}
 		else {
 			TransponderState = FlightData;
@@ -279,12 +277,18 @@ void switchDisplayState(bool increase) {
 
 void ChangeCubesatMode() {
 	if (!CubesatConnected) return;
-	if (LowPowerState == SENDING || ActiveState == SENDING || ArmedState == SENDING) return;
-	if (TransponderState == LowPowerMode && LowPowerState == OFF) {
-		LowPowerState = SENDING;
+	if (TransponderState == StatusMode && !SendingData) {
+		TransponderState = EditStatusMode;
+		blink = false;
+		SelectedStatusState = StatusState;
 		RefreshLCD();
-		SendNewState();
 	}
+	else if (TransponderState == EditStatusMode) {
+		TransponderState = StatusMode;
+		SendNewState();
+		RefreshLCD();
+	}
+	/*
 	else if (TransponderState == ActiveMode && ActiveState == OFF) {
 		ActiveState = SENDING;
 		RefreshLCD();
@@ -295,20 +299,7 @@ void ChangeCubesatMode() {
 		RefreshLCD();
 		SendNewState();
 	}
-	RadioTimer.after(10000, CheckForSendSuccess);
-}
-
-void CheckForSendSuccess() {
-	if (LowPowerState == SENDING) {
-		LowPowerState = OFF;
-	}
-	if (ActiveState == SENDING) {
-		ActiveState = OFF;
-	}
-	if (ArmedState == SENDING) {
-		ArmedState = OFF;
-	}
-	RefreshLCD();
+	*/
 }
 
 #pragma endregion
@@ -326,18 +317,21 @@ void LogToSD(String data, String fileName) {
 
 void UpdateState(int newState) {
 	if (newState == 0) {
-		LowPowerState = ON;
-		if (ActiveState != SENDING) ActiveState = OFF;
-		if (ArmedState != SENDING) ArmedState = OFF;
+		if (StatusState == ON) SendingData = false;
+		if (ArmedState == ON) SendingData = false;
+		StatusState = OFF;
+		ArmedState = OFF;	
 	}
 	else if (newState == 1) {
-		if (LowPowerState != SENDING) LowPowerState = OFF;
-		ActiveState = ON;
-		if (ArmedState != SENDING) ArmedState = OFF;
+		if (StatusState == OFF) SendingData = false;
+		if (ArmedState == ON) SendingData = false;
+		StatusState = ON;
+		ArmedState = OFF;
 	}
 	else if (newState == 2) {
-		if (LowPowerState != SENDING) LowPowerState = OFF;
-		if (ActiveState != SENDING) ActiveState = OFF;
+		if (ArmedState == OFF) SendingData = false;
+		if (StatusState == ON) SendingData = false;
+		StatusState = OFF;
 		ArmedState = ON;
 	}
 	RefreshLCD();

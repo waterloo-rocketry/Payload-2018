@@ -1,11 +1,11 @@
 ﻿void RefreshLCD() {
 	switch (TransponderState)
 	{
-	case LowPowerMode:
-		RefreshLowPowerMode();
+	case StatusMode:
+		RefreshStatusMode();
 		break;
-	case ActiveMode:
-		RefreshActiveMode();
+	case EditStatusMode:
+		RefreshStatusMode();
 		break;
 	case ArmedMode:
 		RefreshArmedMode();
@@ -30,33 +30,46 @@
 	}
 }
 
-void RefreshLowPowerMode() {
+void RefreshStatusMode() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
-	lcd.print(LOW_POWER_1);
+	lcd.print(STATUS_1);
 	if (!CubesatConnected) {
 		lcd.setCursor(0, 1);
 		lcd.print(NO_CONNECTION);
 	}
 	else {
-		lcd.setCursor(0, 1);
-		lcd.print(ModeStateStrings[LowPowerState]);
+		lcd.setCursor(13, 0);
+		lcd.print(OFFMESSAGE);
+		lcd.setCursor(13, 1);
+		lcd.print(ONMESSAGE);
+
+		if (TransponderState == StatusMode) {
+			if (StatusState == ON) {
+				lcd.setCursor(11, 1);
+			}
+			else {
+				lcd.setCursor(11, 0);
+			}
+		}
+		else if (TransponderState == EditStatusMode) {
+			if (SelectedStatusState == ON) {
+				lcd.setCursor(11, 1);
+			}
+			else {
+				lcd.setCursor(11, 0);
+			}
+		}		
+		if ((TransponderState == EditStatusMode && blink) || TransponderState == StatusMode) {
+			lcd.print("->");
+		}		
+		if (SendingData) {
+			lcd.setCursor(0, 1);
+			lcd.print(SENDINGMESSAGE);
+		}
 	}
 }
 
-void RefreshActiveMode() {
-	lcd.clear();
-	lcd.setCursor(0, 0);
-	lcd.print(ACTIVE_1);
-	if (!CubesatConnected) {
-		lcd.setCursor(0, 1);
-		lcd.print(NO_CONNECTION);
-	}
-	else {
-		lcd.setCursor(0, 1);
-		lcd.print(ModeStateStrings[ActiveState]);
-	}
-}
 
 void RefreshArmedMode() {
 	lcd.clear();
@@ -68,7 +81,7 @@ void RefreshArmedMode() {
 	}
 	else {
 		lcd.setCursor(0, 1);
-		lcd.print(ModeStateStrings[ArmedState]);
+		//lcd.print(ModeStateStrings[ArmedState]);
 	}
 }
 

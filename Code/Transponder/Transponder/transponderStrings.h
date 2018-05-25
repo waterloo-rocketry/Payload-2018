@@ -1,8 +1,12 @@
-#define LOW_POWER_1 "LOW POWER MODE"
+#define STATUS_1 "POWER: "
 #define ACTIVE_1 "ACTIVE MODE"
 #define ARMED_1 "ARMED MODE"
 
 #define NO_CONNECTION "ERROR: NO CONN"
+
+#define OFFMESSAGE "OFF"
+#define ONMESSAGE "ON"
+#define SENDINGMESSAGE "SENDING"
 
 #define GPS "GPS: "
 #define ALTITUDE "ALTITUDE: "
