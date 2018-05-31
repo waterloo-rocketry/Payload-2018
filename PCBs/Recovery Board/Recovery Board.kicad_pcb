@@ -1790,7 +1790,7 @@
       (net 52 "Net-(R6-Pad1)"))
   )
 
-  (module PayloadBoards:CPC1002NTR (layer F.Cu) (tedit 5AF0D3BA) (tstamp 5A9D1778)
+  (module PayloadBoards:CPC1002NTR locked (layer F.Cu) (tedit 5AF0D3BA) (tstamp 5A9D1778)
     (at 135.636 132.08 180)
     (path /5A8B1335)
     (fp_text reference S1 (at -0.254 0.254 180) (layer F.SilkS) hide

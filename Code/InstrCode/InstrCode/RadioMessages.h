@@ -7,6 +7,9 @@
 #define ERROR_MESSAGE 'E'
 #define DATA_MESSAGE 'D'
 
+//Status code defs
+#define SD_SOURCE 'Q'		//Why Q? I ran out of relevant variables :/
+
 //Message source defs
 #define INSTR_SOURCE 'I'
 #define ALTIMETER_SOURCE 'A'

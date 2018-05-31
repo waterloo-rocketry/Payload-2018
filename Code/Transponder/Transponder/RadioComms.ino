@@ -19,7 +19,10 @@ void SendNewState() {
 		if (SelectedStatusState == OFF) newState = 0;
 		else if (SelectedStatusState == ON) newState = 1;
 	}
-	else if (TransponderState == ArmedMode) newState = 2;
+	else if (TransponderState == ArmedMode || TransponderState) {
+		if (SelectedArmedState == OFF) newState = 0;
+		else if (SelectedArmedState == ON) newState = 2;
+	}
 
 	String message = String(MESSAGE_BEGIN) + DATA_MESSAGE + TRANSPONDER_SOURCE + STATE + (int)newState + String(DATA_STOP) + DATA_STOP + MESSAGE_STOP;
 	Serial.print(message); 
@@ -44,14 +47,16 @@ void GetMessageFromRadio() {
 }
 
 void CheckForConnectivity() {
+	InstrConnected = InstrDetected;
+	InstrDetected = false;
+
 	if (MessageReceived == false) {
 		if (CubesatConnected == true) {
 			CubesatConnected = false;
 			StatusState = OFF;
 			ArmedState = OFF;
-
-			RefreshLCD();
 		}
 	}
 	MessageReceived = false;
+	RefreshLCD();
 }

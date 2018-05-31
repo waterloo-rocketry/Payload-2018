@@ -7,6 +7,9 @@
 #define ERROR_MESSAGE 'E'
 #define DATA_MESSAGE 'D'
 
+//Message status defs
+#define SD_STATUS 'Q'
+
 //Message source defs
 #define INSTR_SOURCE 'I'
 #define ALTIMETER_SOURCE 'A'

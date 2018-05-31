@@ -42,6 +42,8 @@ static gps_fix  fix;
 
 //uint32_t timer = millis();
 
+bool FileSuccess = false;
+
 Timer RadioTimer;
 float lastSample = 0; //Last time a data sample was taken
 
@@ -69,7 +71,7 @@ float lastGyro1Z = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
 	Serial.begin(9600);
-
+	InitializeSDFile();
 	//Setup Pressure Sensor
 	sensor.connect();
 
@@ -81,7 +83,7 @@ void setup() {
 	IMU2.settings.accelRange = 4;
 	IMU1.begin();
 	IMU2.begin();
-	InitializeSDFile();
+
 	RadioTimer.every(1000, SendLastData);
 
 }
@@ -89,7 +91,7 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	delay(1000);
+	delay(100);
 	RadioTimer.update();
 	lastSample = millis();
 	GetGPSData();
@@ -98,15 +100,16 @@ void loop() {
 	GetAmbientLightData();
 	WriteLastDataToSD();
 }
+
 void SendGPSData() {
 	Wire.beginTransmission(SLAVE_NUMBER);
 	Wire.print(MESSAGE_BEGIN);
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(GPSCOORDS);
-	Wire.print(fix.latitude());
+	Wire.print(fix.latitude() != 0 ? fix.latitude() : -1);
 	Wire.print(DATA_STOP);
-	Wire.print(fix.longitude());
+	Wire.print(fix.longitude() != 0 ? fix.longitude() : -1);
 	Wire.print(DATA_STOP);
 	Wire.print(MESSAGE_STOP);
 	Wire.endTransmission();
@@ -118,6 +121,7 @@ void SendLastData() {
 	SendPressureData();
 	SendIMUData();
 	SendGPSData();
+	SendSDStatus();
 }
 
 void GetAmbientLightData() {
@@ -147,6 +151,18 @@ void GetIMUData() {
 	lastGyro1X = IMU2.readFloatGyroX();
 	lastGyro1Y = IMU2.readFloatGyroY();
 	lastGyro1Z = IMU2.readFloatGyroZ();
+}
+
+void SendSDStatus() {
+	Wire.beginTransmission(SLAVE_NUMBER);
+	Wire.print(MESSAGE_BEGIN);
+	Wire.print(ERROR_MESSAGE);
+	Wire.print(INSTR_SOURCE);
+	Wire.print(SD_SOURCE);
+	Wire.print(FileSuccess ? 1 : 0);
+	Wire.print(DATA_STOP);
+	Wire.print(MESSAGE_STOP);
+	Wire.endTransmission();
 }
 
 void SendTimerData() {

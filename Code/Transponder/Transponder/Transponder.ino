@@ -17,12 +17,11 @@ enum DisplayStateOptions {
 	StatusMode,
 	EditStatusMode,
 	ArmedMode,
-	GPSData,
-	AltitudeData,
-	TemperatureData,
+	EditArmedMode,
+	ConnectionData,
 	FlightData,
-	SpeedData,
-	ErrorData
+	TempData,
+	GPSData
 };
 
 enum ModeState {
@@ -34,12 +33,21 @@ bool SendingData = false;
 
 ModeState StatusState;
 ModeState SelectedStatusState;
+
 ModeState ArmedState;
+ModeState SelectedArmedState;
 
 DisplayStateOptions TransponderState;
 
 bool CubesatConnected = false;
 bool MessageReceived = false;
+
+bool SD1Connected = false;
+bool SD2Connected = false;
+bool InstrConnected = false;
+bool AltimeterConnected = false;
+bool GPSFix = false;
+bool InstrDetected = false;
 
 // Push Buttons
 int LeftButtonState = 0;
@@ -50,7 +58,9 @@ int SelectButtonState = 0;
 LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 //Thermistor
-float thermData[3] = { 0,0,0 };
+float therm1 = 0;
+float therm2 = 0;
+float therm3 = 0;
 
 //Light sensor
 int lightValue = 0;
@@ -72,6 +82,8 @@ float gyroDataZ = 0;
 float pressureData = 0;
 float presTempData = 0;
 float altitude = 0;
+float altitudeDelta = 0;
+float velocity;
 
 //GPS
 float gpsLat = 0;
@@ -96,7 +108,7 @@ void setup() {
 	Serial.begin(9600);
 	
 	RadioTimer.every(1000, GetMessageFromRadio);
-	RadioTimer.every(5000, CheckForConnectivity);
+	RadioTimer.every(1500, CheckForConnectivity);
 	RadioTimer.every(250, []() -> void {blink = !blink; RefreshLCD(); });
 	InitializeSDFile();
 	
@@ -114,15 +126,26 @@ void ParseMessage(String data) {
 	char messageSource = data[2];
 
 	if (messageType == ERROR_MESSAGE) {
-		//TODO: Handle Error Logic
+		if (messageSource == INSTR_SOURCE) {
+			char instrMessage = data[3];
+			int startChar;
+			if (instrMessage == SD_STATUS) {
+				startChar = 4;
+				SD1Connected = ParseInt(data, &startChar) == 1 ? true : false;
+				RefreshLCD();  
+			}
+		}
 	}
 	else if (messageType == DATA_MESSAGE) {
 		if (messageSource == INSTR_SOURCE) {
+			InstrDetected = true;
 			char instrMessage = data[3];
 			int startChar;
 			if (instrMessage == SAMPLE_TIME) {
 				startChar = 4;
-				sampleTime = ParseInt(data, &startChar);
+				int newSampleTime = ParseInt(data, &startChar);
+				velocity = altitudeDelta / ((newSampleTime - sampleTime)/1000);
+				sampleTime = newSampleTime;
 				WriteLastDataToSD();
 				RefreshLCD();
 			}
@@ -140,7 +163,6 @@ void ParseMessage(String data) {
 				startChar = 4;
 				lightValue = ParseInt(data, &startChar);
 				RefreshLCD();
-				//UpdateLightData(lightData);
 				
 			}
 			else if (instrMessage == ACCELEROMETER) {
@@ -176,15 +198,26 @@ void ParseMessage(String data) {
 				pressureData = ParseFloat(data, &startChar);
 				startChar++;
 				presTempData = ParseFloat(data, &startChar);
+				float newAltitude = (((pow((1013.25 / (pressureData*.01)), (1 / 5.257)) - 1)*(presTempData*.01 + 273.15)) / 0.0065) * 3.28084;
+				altitudeDelta = newAltitude - altitude;
+				altitude = newAltitude;
 				RefreshLCD();
-				//UpdatePressureData(presData, tempData);
 				
 			}
 			else if (instrMessage == GPSCOORDS) {
 				startChar = 4;
-				gpsLat = ParseFloat(data, &startChar);
+				float newGPSLat = ParseFloat(data, &startChar);
 				startChar++;
-				gpsLong = ParseFloat(data, &startChar);
+				float newGPSLong = ParseFloat(data, &startChar);
+
+				if (newGPSLat == -1 || newGPSLong == -1) {
+					GPSFix = false;
+				}
+				else {
+					GPSFix = true;
+					gpsLat = newGPSLat;
+					gpsLong = newGPSLong;
+				}
 				RefreshLCD();
 			}
 		}
@@ -214,7 +247,7 @@ void switchDisplayState(bool increase) {
 			TransponderState = ArmedMode;
 		}
 		else {
-			TransponderState = SpeedData;
+			TransponderState = GPSData;
 		}
 		break;
 	case EditStatusMode:
@@ -223,50 +256,47 @@ void switchDisplayState(bool increase) {
 		break;
 	case ArmedMode:
 		if (increase) {
-			TransponderState = GPSData;
+			TransponderState = ConnectionData;
 		}
 		else {
 			TransponderState = StatusMode;
 		}
 		break;
-	case GPSData:
+	case EditArmedMode:
+		if (SelectedArmedState == ON) SelectedArmedState = OFF;
+		else if (SelectedArmedState == OFF) SelectedArmedState = ON;
+		break;
+	case ConnectionData:
 		if (increase) {
-			TransponderState = AltitudeData;
+			TransponderState = FlightData;
 		}
 		else {
 			TransponderState = ArmedMode;
 		}
 		break;
-	case AltitudeData:
+	case FlightData: {
 		if (increase) {
-			TransponderState = TemperatureData;
+			TransponderState = TempData;
 		}
 		else {
+			TransponderState = ConnectionData;
+		}
+		break;
+	}
+	case TempData:
+		if (increase) {
 			TransponderState = GPSData;
 		}
-		break;
-	case TemperatureData:
-		if (increase) {
+		else {
 			TransponderState = FlightData;
 		}
-		else {
-			TransponderState = AltitudeData;
-		}
 		break;
-	case FlightData:
-		if (increase) {
-			TransponderState = SpeedData;
-		}
-		else {
-			TransponderState = TemperatureData;
-		}
-		break;
-	case SpeedData:
+	case GPSData:
 		if (increase) {
 			TransponderState = StatusMode;
 		}
 		else {
-			TransponderState = FlightData;
+			TransponderState = TempData;
 		}
 		break;
 	default:
@@ -285,6 +315,18 @@ void ChangeCubesatMode() {
 	}
 	else if (TransponderState == EditStatusMode) {
 		TransponderState = StatusMode;
+		SendNewState();
+		RefreshLCD();
+	}
+
+	if (TransponderState == ArmedMode && !SendingData) {
+		TransponderState = EditArmedMode;
+		blink = false;
+		SelectedArmedState = ArmedState;
+		RefreshLCD();
+	}
+	else if (TransponderState == EditArmedMode) {
+		TransponderState = ArmedMode;
 		SendNewState();
 		RefreshLCD();
 	}

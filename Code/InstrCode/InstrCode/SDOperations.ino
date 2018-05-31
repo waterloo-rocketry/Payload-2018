@@ -1,97 +1,98 @@
-﻿
-bool FileSuccess = false;
-SdFat SD;
+﻿SdFat SD;
+char comma = ',';
 
 void InitializeSDFile() {
 	if (!SD.begin()) return;
 	FileSuccess = true;
 
-	File dataFile = SD.open(FILE_NAME, O_CREAT | O_AT_END);
-
+	File dataFile = SD.open("Flight Data.csv", FILE_WRITE);
 	dataFile.print(TIME_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(LIGHT_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(PRESSURE_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(PRESSURE_TEMP_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 
 	dataFile.print(ACC_0_X_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(ACC_0_Y_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(ACC_0_Z_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_0_X_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_0_Y_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_0_Z_HEADER);
-	dataFile.print(",");
-	/*
+	dataFile.print(comma);
+	
 	dataFile.print(ACC_1_X_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(ACC_1_Y_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(ACC_1_Z_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_1_X_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_1_Y_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GYRO_1_Z_HEADER);
-	dataFile.print(",");
-	*/
+	dataFile.print(comma);
+
 	dataFile.print(GPS_LAT_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(GPS_LONG_HEADER);
 	dataFile.print("\n");
 	dataFile.close();
-	delay(3000);
 }
 
 void WriteLastDataToSD() {
-	if (!FileSuccess) return;
-	File dataFile = SD.open(FILE_NAME, O_AT_END);
-	dataFile.print(lastSample);
-	dataFile.print(",");
-	dataFile.print(lastLight);
-	dataFile.print(",");
-	dataFile.print(lastPressure);
-	dataFile.print(",");
-	dataFile.print(lastPresTemp);
-	dataFile.print(",");
-
-	dataFile.print(lastAcc0X);
-	dataFile.print(",");
-	dataFile.print(lastAcc0Y);
-	dataFile.print(",");
-	dataFile.print(lastAcc0Z);
-	dataFile.print(",");
-	dataFile.print(lastGyro0X);
-	dataFile.print(",");
-	dataFile.print(lastGyro0Y);
-	dataFile.print(",");
-	dataFile.print(lastGyro0Z);
-	dataFile.print(",");
-	/*
-	dataFile.print(lastAcc1X);
-	dataFile.print(",");
-	dataFile.print(lastAcc1Y);
-	dataFile.print(",");
-	dataFile.print(lastAcc1Z);
-	dataFile.print(",");
-	dataFile.print(lastGyro1X);
-	dataFile.print(",");
-	dataFile.print(lastGyro1Y);
-	dataFile.print(",");
-	dataFile.print(lastGyro1Z);
-	dataFile.print(",");
-	dataFile.print(fix.latitude());
-	dataFile.print(",");
-	dataFile.print(fix.longitude());
-	*/
-	dataFile.print("\n");
-	dataFile.close();
+	if (!FileSuccess) {
+		InitializeSDFile();
+		return;
+	}
+	File data = SD.open("Flight Data.csv", FILE_WRITE);
+	if (!data) {
+		FileSuccess = false;
+		return;
+	}
+	data.print(lastSample);
+	data.print(comma);
+	data.print(lastLight);
+	data.print(comma);
+	data.print(lastPressure);
+	data.print(comma);
+	data.print(lastPresTemp);
+	data.print(comma);
+	data.print(lastAcc0X);
+	data.print(comma);
+	data.print(lastAcc0Y);
+	data.print(comma);
+	data.print(lastAcc0Z);
+	data.print(comma);
+	data.print(lastGyro0X);
+	data.print(comma);
+	data.print(lastGyro0Y);
+	data.print(comma);
+	data.print(lastGyro0Z);
+	data.print(comma);
+	data.print(lastAcc1X);
+	data.print(comma);
+	data.print(lastAcc1Y);
+	data.print(comma);
+	data.print(lastAcc1Z);
+	data.print(comma);
+	data.print(lastGyro1X);
+	data.print(comma);
+	data.print(lastGyro1Y);
+	data.print(comma);
+	data.print(lastGyro1Z);
+	data.print(comma);
+	data.print(fix.latitude());
+	data.print(comma);
+	data.print(fix.longitude());
+	data.print("\n");
+	data.close();
 }

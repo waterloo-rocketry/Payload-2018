@@ -1,8 +1,8 @@
 
 // Push Buttons
 #define LeftButton 15
-#define RightButton 16
-#define SelectButton 14 //CHANGE THESE NUMBERS. ODDS ARE THEY ARE ALL SWITCHED
+#define RightButton 14
+#define SelectButton 16 //CHANGE THESE NUMBERS. ODDS ARE THEY ARE ALL SWITCHED
 
 // LCD Buttons
 #define RS 7
