@@ -16,6 +16,8 @@ enum RecoveryState {
 
 RecoveryState state;
 String i2cData = "";
+int ArmedTimeout = 120; //Amount of time in minutes to default to disarmed after arming
+int ArmedCountdown = 0;
 
 void setup() {
 	pinMode(stratSoftSerialPin, INPUT);
@@ -40,41 +42,32 @@ void ReceivedMessage(int bytes) {
 	}
 }
 
-
 void loop() {
-	delay(1000);
+	
 	String xbeeData = ReadFromSerial();
 	if (xbeeData != "")
 		ParseMessage(xbeeData);
 
 	if (state == 0) {
+		delay(2500);
 		SendStateDataOverRadio();
 	}
 	else if (state == 1) {
+		delay(500);
 		SendStateDataOverRadio();
 		SendInstrDataOverRadio();
-		/*
-	  //read from i2C bus
-		Wire.requestFrom(slaveNum, 6); //request 6 bytes from slave device
-		String I2CData = "";
-		while (Wire.available()) {  //slave may send less than requested
-		  char temp = Wire.read();   //receive a byte as a char
-		  I2CData += temp;       // add char to data package
-		}
-		if (I2CData != "") {
-			outgoingData += INSTR_SOURCE;
-		}
-		if (outgoingData == ""){
-			outgoingData = "disInstrError"; //  add disabled instr arduino error to dataPackage if bus empty
-		}
-		*/
 	}
 	else if (state == 2) {
+		delay(500);
+
+		if (millis() - ArmedCountdown > (ArmedTimeout * 60000)) {
+			SwitchState(0);
+		}
+
 		SendStateDataOverRadio();
 		SendInstrDataOverRadio();
 	}
 }
-
 
 void SwitchState(int stateNumber) {
 	
@@ -91,6 +84,7 @@ void SwitchState(int stateNumber) {
 		break;
 	case 2:
 		state = Armed;
+		ArmedCountdown = millis();
 		digitalWrite(instrRelayPin, HIGH);
 		digitalWrite(stratRelayPin, HIGH);
 		break;

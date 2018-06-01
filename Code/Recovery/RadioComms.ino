@@ -19,6 +19,16 @@ void SendStateDataOverRadio() {
 	Serial.print((int)state);
 	Serial.print(DATA_STOP);
 	Serial.print(MESSAGE_STOP);
+
+	if (state == Armed) {
+		Serial.print(MESSAGE_BEGIN);
+		Serial.print(DATA_MESSAGE);
+		Serial.print(RECOVERY_SOURCE);
+		Serial.print(ARMED_TIMER);
+		Serial.print((ArmedTimeout * 60000) - (millis() - ArmedCountdown));
+		Serial.print(DATA_STOP);
+		Serial.print(MESSAGE_STOP);
+	}
 }
 
 void SendInstrDataOverRadio() {

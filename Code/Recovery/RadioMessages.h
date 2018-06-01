@@ -9,9 +9,11 @@
 
 //Message source defs
 #define INSTR_SOURCE 'I'
-#define ALTIMETER_SOURCE 'A'
+//#define ALTIMETER_SOURCE 'A'
 #define RECOVERY_SOURCE 'R'
 #define TRANSPONDER_SOURCE 'T'
+
+#define ARMED_TIMER 'A'
 
 //Sensor defs
 #define THERMISTOR 'T'

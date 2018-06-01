@@ -32,8 +32,9 @@ void SendNewState() {
 }
 
 void GetMessageFromRadio() {
+	String message;
 	while (Serial.available()) {
-		String message = ReadFromSerial();
+		message = ReadFromSerial();
 		if (message != "") {
 			MessageReceived = true;
 			if (CubesatConnected == false) {
@@ -44,6 +45,7 @@ void GetMessageFromRadio() {
 			
 		}
 	}
+	WriteLastDataToSD();
 }
 
 void CheckForConnectivity() {

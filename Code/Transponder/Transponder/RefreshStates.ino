@@ -88,6 +88,8 @@ void RefreshArmedMode() {
 		if (TransponderState == ArmedMode) {
 			if (ArmedState == ON) {
 				lcd.setCursor(11, 1);
+				lcd.setCursor(0, 1);
+				lcd.print(ArmedCountdown / 60 / 1000);
 			}
 			else {
 				lcd.setCursor(11, 0);
@@ -134,7 +136,7 @@ void RefreshFlightData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(ALTITUDE);
-	lcd.print(round(altitude));
+	lcd.print(round(altitude-groundLevel));
 	lcd.print(" ");
 	lcd.print(LIGHT);
 	lcd.print(round(((float)lightValue / (float)1023) * 100));
@@ -162,7 +164,7 @@ void RefreshGPSData() {
 void RefreshTemperatureData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
-	lcd.print(TEMP0);
+	//lcd.print(TEMP0);
 	lcd.print(TEMP1);
 	lcd.print(round(therm1));
 	lcd.setCursor(0, 1);

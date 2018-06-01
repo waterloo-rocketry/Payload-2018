@@ -3,15 +3,18 @@
  Created:	4/23/2018 12:08:16 PM
  Author:	paula
 */
-
+#include "SDFileHeaders.h"
+#include <SysCall.h>
+#include <SdFatConfig.h>
+#include <SdFat.h>
+#include <MinimumSerial.h>
+#include <FreeStack.h>
+#include <BlockDriver.h>
 #include <LiquidCrystal.h>
 #include "transponderStrings.h"
 #include "PinRefs.h"
 #include "RadioMessages.h"
 #include "Timer.h"
-
-#include <SPI.h>
-#include <SD.h>
 
 enum DisplayStateOptions {
 	StatusMode,
@@ -67,14 +70,16 @@ int lightValue = 0;
 const int lightDeployThreshold = 5;
 
 //Accelerometer
-float accDataX = 0;
-float accDataY = 0;
-float accDataZ = 0;
+float acc0DataX = 0;
+float acc0DataY = 0;
+float acc0DataZ = 0;
+
 
 //Gyroscope
-float gyroDataX = 0;
-float gyroDataY = 0;
-float gyroDataZ = 0;
+float gyro0DataX = 0;
+float gyro0DataY = 0;
+float gyro0DataZ = 0;
+
 
 //float gyroData[3] = { 0,0,0 };
 
@@ -84,12 +89,16 @@ float presTempData = 0;
 float altitude = 0;
 float altitudeDelta = 0;
 float velocity;
+float groundLevel = 0;
 
 //GPS
 float gpsLat = 0;
 float gpsLong = 0;
 
 int sampleTime = 0;	//last time data was sampled from the cubesat
+
+int ArmedCountdown = 120 * 60 * 1000;	//Time until it defaults to off in millis
+int lastArmedSample;
 
 Timer RadioTimer;
 
@@ -100,18 +109,18 @@ void setup() {
 	pinMode(LeftButton, INPUT);
 	pinMode(RightButton, INPUT);
 	pinMode(SelectButton, INPUT);
-
 	lcd.begin(16, 2);
 	TransponderState = StatusMode;
 	RefreshLCD();
 
 	Serial.begin(9600);
-	
+
 	RadioTimer.every(1000, GetMessageFromRadio);
+	RadioTimer.every(1000, UpdateArmedTimer);
 	RadioTimer.every(1500, CheckForConnectivity);
 	RadioTimer.every(250, []() -> void {blink = !blink; RefreshLCD(); });
 	InitializeSDFile();
-	
+
 }
 
 // the loop function runs over and over again until power down or reset
@@ -132,7 +141,7 @@ void ParseMessage(String data) {
 			if (instrMessage == SD_STATUS) {
 				startChar = 4;
 				SD1Connected = ParseInt(data, &startChar) == 1 ? true : false;
-				RefreshLCD();  
+				RefreshLCD();
 			}
 		}
 	}
@@ -144,65 +153,62 @@ void ParseMessage(String data) {
 			if (instrMessage == SAMPLE_TIME) {
 				startChar = 4;
 				int newSampleTime = ParseInt(data, &startChar);
-				velocity = altitudeDelta / ((newSampleTime - sampleTime)/1000);
+				velocity = altitudeDelta / ((newSampleTime - sampleTime) / 1000);
 				sampleTime = newSampleTime;
 				WriteLastDataToSD();
 				RefreshLCD();
 			}
 			if (instrMessage == THERMISTOR) {
-				/*
+				
 				startChar = 4;
-				int thermistorNumber = ParseInt(data, &startChar);
-				startChar++;
-				float thermistorData = ParseFloat(data, &startChar);
-				UpdateThermistorData(thermistorNumber, thermistorData);
-				*/
+				//int thermistorNumber = ParseInt(data, &startChar);
+				//startChar++;
+				therm1 = ParseFloat(data, &startChar);
+				RefreshLCD();
+
+				//UpdateThermistorData(thermistorNumber, thermistorData);
+				
 			}
 			else if (instrMessage == AMBIENT_LIGHT) {
-				
+
 				startChar = 4;
 				lightValue = ParseInt(data, &startChar);
 				RefreshLCD();
-				
+
 			}
 			else if (instrMessage == ACCELEROMETER) {
-				
 				startChar = 4;
-				//int accNumber = ParseInt(data, &startChar);
-				//startChar++;
-				accDataX = ParseFloat(data, &startChar);
+				acc0DataX = ParseFloat(data, &startChar);
 				startChar++;
-				accDataY = ParseFloat(data, &startChar);
+				acc0DataY = ParseFloat(data, &startChar);
 				startChar++;
-				accDataZ = ParseFloat(data, &startChar);
+				acc0DataZ = ParseFloat(data, &startChar);
 				RefreshLCD();
-				
-				//UpdateAccData(accNumber, accDataX, accDataY, accDataZ);
 			}
 			else if (instrMessage == GYROSCOPE) {
-				/*
-				int startChar = 4;
-				int gyroNumber = ParseInt(data, &startChar);
+				startChar = 4;
+				gyro0DataX = ParseFloat(data, &startChar);
 				startChar++;
-				float gyroDataX = ParseFloat(data, &startChar);
+				gyro0DataY = ParseFloat(data, &startChar);
 				startChar++;
-				float gyroDataY = ParseFloat(data, &startChar);
-				startChar++;
-				float gyroDataZ = ParseFloat(data, &startChar);
-				UpdateGyroData(gyroNumber, gyroDataX, gyroDataY, gyroDataZ);
-				*/
+				gyro0DataZ = ParseFloat(data, &startChar);
 			}
 			else if (instrMessage == PRESSURE_SENSOR) {
-				
+
 				startChar = 4;
 				pressureData = ParseFloat(data, &startChar);
 				startChar++;
 				presTempData = ParseFloat(data, &startChar);
 				float newAltitude = (((pow((1013.25 / (pressureData*.01)), (1 / 5.257)) - 1)*(presTempData*.01 + 273.15)) / 0.0065) * 3.28084;
+				if (altitude == 0) {
+					altitudeDelta = 0;
+					altitude = newAltitude;
+					groundLevel = newAltitude;
+				}
 				altitudeDelta = newAltitude - altitude;
 				altitude = newAltitude;
 				RefreshLCD();
-				
+
 			}
 			else if (instrMessage == GPSCOORDS) {
 				startChar = 4;
@@ -223,14 +229,14 @@ void ParseMessage(String data) {
 		}
 		else if (messageSource == RECOVERY_SOURCE) {
 			char recoveryMessage = data[3];
-			int stateChar = 4;
-			switch (recoveryMessage)
-			{
-			case STATE:
+			if (recoveryMessage == STATE) {
+				int stateChar = 4;
 				UpdateState(ParseInt(data, &stateChar));
-				break;
-			default:
-				break;
+			}
+			if (recoveryMessage == ARMED_TIMER) {
+				int stateChar = 4;
+				ArmedCountdown = ParseInt(data, &stateChar);
+				lastArmedSample = millis();
 			}
 		}
 	}
@@ -346,23 +352,12 @@ void ChangeCubesatMode() {
 
 #pragma endregion
 
-void LogToSD(String data, String fileName) {
-	File dataFile = SD.open(fileName, FILE_WRITE);
-
-	// if the file opened okay, write to it:
-	if (dataFile) {
-		dataFile.println(millis() + ", " + data);
-		// close the file:
-		dataFile.close();
-	}
-}
-
 void UpdateState(int newState) {
 	if (newState == 0) {
 		if (StatusState == ON) SendingData = false;
 		if (ArmedState == ON) SendingData = false;
 		StatusState = OFF;
-		ArmedState = OFF;	
+		ArmedState = OFF;
 	}
 	else if (newState == 1) {
 		if (StatusState == OFF) SendingData = false;
@@ -398,4 +393,10 @@ float ParseFloat(String data, int* startChar) {
 	//lcd.print(out);
 	//lcd.print(out.toFloat());
 	return out.toFloat();
+}
+
+void UpdateArmedTimer() {
+	ArmedCountdown -= (millis() - lastArmedSample);
+	lastArmedSample = millis();
+	RefreshLCD();
 }

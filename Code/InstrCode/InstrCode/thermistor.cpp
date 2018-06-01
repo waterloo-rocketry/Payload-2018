@@ -1,63 +1,123 @@
-#include "Arduino.h"
+/**
+ * Copyright (c) 2014 panStamp <contact@panstamp.com>
+ * 
+ * This file is part of the panStamp project.
+ * 
+ * panStamp  is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * any later version.
+ * 
+ * panStamp is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with panStamp; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 
+ * USA
+ * 
+ * Author: Daniel Berenguer
+ * Creation date: 11/05/2014
+ *
+ * This library simplifies the use of NTC thermistors by using Steinhart
+ * simplified formula.
+ * http://en.wikipedia.org/wiki/Steinhart%E2%80%93Hart_equation
+ *
+ * Based on procedure explained by Adafruit:
+ * https://learn.adafruit.com/thermistor/using-a-thermistor
+ *
+ * This library works only with the following circuit topology
+ *
+ * Vcc---NTC---ADC---SERIES_RESISTOR---GND
+ */
 
 #include "thermistor.h"
+#include "HardwareSerial.h"
+// Temperature for nominal resistance (almost always 25 C)
+#define TEMPERATURENOMINAL 25
 
-thermistor::thermistor() {
-	 name_ = "";
-	 pin_ = A0;
-	 Bcoeff_ = 3560;// The beta coefficient of the thermistor (usually 3000-4000)
-   ThermistorNominal_ = 220;// resistance at nominal temperature
-	 SeriesResistor_ = 220;// the value of the 'other' resistor
-   TempNominal_ = 25;// temp. for nominal resistance (almost always 25 C)
+// Number of ADC samples
+#define NUMSAMPLES         5 
 
-	 oldest_ = 0;
- }
+// ADC resolution
+#ifdef PANSTAMP_NRG
+#define ADC_RESOLUTION 0xFFF
+#else
+#define ADC_RESOLUTION 1023
+#endif
+#define VERBOSE_SENSOR_ENABLED 0
+/**
+ * THERMISTOR
+ * 
+ * Class constructor
+ *
+ * @param adcPin Analog pin where the thermistor is connected
+ * @param nomRes Nominal resistance at 25 degrees Celsius
+ * @param bCoef beta coefficient of the thermistor
+ * @param serialRes Value of the serial resistor
+ */
+THERMISTOR::THERMISTOR(uint8_t adcPin, uint16_t nomRes, uint16_t bCoef, uint16_t serialRes) 
+{
+  analogPin = adcPin;
+  nominalResistance = nomRes;
+  bCoefficient = bCoef;
+  serialResistance = serialRes;
+}
 
-thermistor::~thermistor() {}
+/**
+ * read
+ *
+ * Read temperature from thermistor
+ *
+ * @return temperature in 0.1 ºC
+ */
+int THERMISTOR::read(void)
+{
+  uint8_t i;
+  uint16_t sample;
+  float average = 0;
 
-void thermistor::readToArray() {
-	//Serial.print("pin value is ");
-	//Serial.println(analogRead(pin_));
+  analogReference(DEFAULT);
 
-	voltages[oldest_] = SeriesResistor_/((1023/analogRead(pin_)) - 1);
+  // take N samples in a row, with a slight delay
+  for (i=0; i< NUMSAMPLES; i++)
+  {
+    sample = analogRead(analogPin);
+    average += sample;
+    delay(10);
+  }
+  average /= NUMSAMPLES;
+
+  #ifdef VERBOSE_SENSOR_ENABLED  
+  Serial.print("Average analog reading "); 
+  Serial.println(average);
+  #endif
  
-	//voltages[oldest_] = analogRead(pin_); 
+  // convert the value to resistance
+  average = ADC_RESOLUTION / average - 1;
+  average = serialResistance / average;
 
-	if (++oldest_ >= SIZE) {
-		oldest_ = 0;
-	}
+  #ifdef VERBOSE_SENSOR_ENABLED
+  Serial.print("Thermistor resistance "); 
+  Serial.println(average);
+  #endif
  
-}
-
-void thermistor::setParams(char * name, unsigned char pin, float bcoeff, float ThermistorNominal) {
-	 name_ = name;
-	 pin_ = pin;
-	 Bcoeff_ = bcoeff;
-	 ThermistorNominal_ = ThermistorNominal;
-
-	 oldest_ = 0;
-
-}
-
-float thermistor::voltageAvg() {
-	float sum = 0;
-	for (int i = 0; i < SIZE; ++i) {
-		sum += voltages[i];
-	}
-
-	return sum / SIZE;
-}
-
-float thermistor::convertedVal() {
-
   float steinhart;
-  steinhart = voltageAvg() / ThermistorNominal_;     // (R/Ro)
+  steinhart = average / nominalResistance;     // (R/Ro)
   steinhart = log(steinhart);                  // ln(R/Ro)
-  steinhart /= Bcoeff_;                   // 1/B * ln(R/Ro)
-  steinhart += 1.0 / (TempNominal_ + 273.15); // + (1/To)
+  steinhart /= bCoefficient;                   // 1/B * ln(R/Ro)
+  steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
   steinhart = 1.0 / steinhart;                 // Invert
   steinhart -= 273.15;                         // convert to C
  
-	return steinhart;
+  #ifdef VERBOSE_SENSOR_ENABLED
+  Serial.print("Temperature "); 
+  Serial.print(steinhart);
+  Serial.println(" *C");
+  #endif
+  
+  return (int)(steinhart * 10);
 }
 

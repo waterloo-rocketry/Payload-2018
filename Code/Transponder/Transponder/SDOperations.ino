@@ -1,66 +1,73 @@
-﻿#include "SDFileHeaders.h"
-
-int fileUID;
-bool FileSuccess = false;
+﻿SdFat SD;
+char comma = ',';
 
 void InitializeSDFile() {
 	if (!SD.begin()) return;
-	FileSuccess = true;
+	SD2Connected = true;
 
-	fileUID = 0;
-	while (SD.exists("Data" + (String)fileUID + ".csv")) {
-		fileUID++;
-	}
-
-	String fileName = "Data" + (String)fileUID + ".csv";
-	File dataFile = SD.open(fileName, FILE_WRITE);
-
+	File dataFile = SD.open("Flight Data.csv", FILE_WRITE);
 	dataFile.print(TIME_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(LIGHT_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(PRESSURE_HEADER);
-	dataFile.print(",");
+	dataFile.print(comma);
 	dataFile.print(PRESSURE_TEMP_HEADER);
-	dataFile.print(",");
-	dataFile.print(ACC_X_HEADER);
-	dataFile.print(",");
-	dataFile.print(ACC_Y_HEADER);
-	dataFile.print(",");
-	dataFile.print(ACC_Z_HEADER);
-	dataFile.print(",");
-	dataFile.print(GYRO_X_HEADER);
-	dataFile.print(",");
-	dataFile.print(GYRO_Y_HEADER);
-	dataFile.print(",");
-	dataFile.print(GYRO_Z_HEADER);
+	dataFile.print(comma);
+
+	dataFile.print(ACC_0_X_HEADER);
+	dataFile.print(comma);
+	dataFile.print(ACC_0_Y_HEADER);
+	dataFile.print(comma);
+	dataFile.print(ACC_0_Z_HEADER);
+	dataFile.print(comma);
+	dataFile.print(GYRO_0_X_HEADER);
+	dataFile.print(comma);
+	dataFile.print(GYRO_0_Y_HEADER);
+	dataFile.print(comma);
+	dataFile.print(GYRO_0_Z_HEADER);
+	dataFile.print(comma);
+
+	dataFile.print(GPS_LAT_HEADER);
+	dataFile.print(comma);
+	dataFile.print(GPS_LONG_HEADER);
 	dataFile.print("\n");
 	dataFile.close();
 }
 
 void WriteLastDataToSD() {
-	if (!FileSuccess) return;
-	String fileName = "Data" + (String)fileUID + ".csv";
-	File dataFile = SD.open(fileName, FILE_WRITE);
-	dataFile.print(sampleTime);
-	dataFile.print(",");
-	dataFile.print(lightValue);
-	dataFile.print(",");
-	dataFile.print(pressureData);
-	dataFile.print(",");
-	dataFile.print(presTempData);
-	dataFile.print(",");
-	dataFile.print(accDataX);
-	dataFile.print(",");
-	dataFile.print(accDataY);
-	dataFile.print(",");
-	dataFile.print(accDataZ);
-	dataFile.print(",");
-	dataFile.print(gyroDataX);
-	dataFile.print(",");
-	dataFile.print(gyroDataY);
-	dataFile.print(",");
-	dataFile.print(gyroDataZ);
-	dataFile.print("\n");
-	dataFile.close();
+	if (!SD2Connected) {
+		InitializeSDFile();
+		return;
+	}
+	File data = SD.open("Flight Data.csv", FILE_WRITE);
+	if (!data) {
+		SD2Connected = false;
+		return;
+	}
+	data.print(sampleTime);
+	data.print(comma);
+	data.print(lightValue);
+	data.print(comma);
+	data.print(pressureData);
+	data.print(comma);
+	data.print(presTempData);
+	data.print(comma);
+	data.print(acc0DataX);
+	data.print(comma);
+	data.print(acc0DataY);
+	data.print(comma);
+	data.print(acc0DataZ);
+	data.print(comma);
+	data.print(gyro0DataX);
+	data.print(comma);
+	data.print(gyro0DataY);
+	data.print(comma);
+	data.print(gyro0DataZ);
+	data.print(comma);
+	data.print(gpsLat);
+	data.print(comma);
+	data.print(gpsLong);
+	data.print("\n");
+	data.close();
 }

@@ -23,8 +23,8 @@
 #include "Timer.h"
 #include "SDFileHeaders.h"
 
-//#include "sensorData.h"
-//#include "thermistor.h"
+#include "thermistor.h"
+
 MS5xxx sensor(&Wire);
 LSM6DS3 IMU1(I2C_MODE, 0x6A);
 LSM6DS3 IMU2(I2C_MODE, 0x6B);
@@ -32,27 +32,23 @@ LSM6DS3 IMU2(I2C_MODE, 0x6B);
 static NMEAGPS  gps;
 static gps_fix  fix;
 
-// Connect to the GPS on the hardware port
-//Adafruit_GPS GPS(&Serial);
-//thermistor t1;
+THERMISTOR* t1;
 
 // Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
 // Set to 'true' if you want to debug and listen to the raw GPS sentences
 #define GPSECHO false
 
-//uint32_t timer = millis();
+bool FileSuccess = false;	//Track if we can succesfully write to the SD card
 
-bool FileSuccess = false;
-
-Timer RadioTimer;
+Timer RadioTimer;		//Time data transmission to the ground
 float lastSample = 0; //Last time a data sample was taken
 
-int lastLight = 0;
+int lastLight = 0;		//last ambient light data
 
 float lastPressure = 0; //last pressure measurement taken (in pA)
 float lastPresTemp = 0;	//last temperature measurement taken from the pressure sensor (in 0.01C)
 
-float lastAcc0X = 0;
+float lastAcc0X = 0;	//last IMU data
 float lastAcc0Y = 0;
 float lastAcc0Z = 0;
 
@@ -71,12 +67,15 @@ float lastGyro1Z = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
 	Serial.begin(9600);
-	InitializeSDFile();
-	//Setup Pressure Sensor
-	sensor.connect();
+	
+	t1 = new THERMISTOR(A1, 220, 3560, 220);
+	pinMode(AMBIENT_LIGHT_PIN, INPUT);
 
-	//Setup GPS
-	gpsPort.begin(9600);
+	InitializeSDFile();		//Setup SD Card
+
+	sensor.connect();		//Setup Pressure Sensor
+
+	gpsPort.begin(9600);	//Setup GPS
 
 	//Setup IMU's
 	IMU1.settings.accelRange = 16;
@@ -84,16 +83,15 @@ void setup() {
 	IMU1.begin();
 	IMU2.begin();
 
-	RadioTimer.every(1000, SendLastData);
+	RadioTimer.every(1000, SendLastData);	//Send data to ground every second
 
 }
 
-
 // the loop function runs over and over again until power down or reset
-void loop() {
-	delay(100);
-	RadioTimer.update();
-	lastSample = millis();
+void loop() {	
+	delay(100);				//sample data at 10Hz
+	RadioTimer.update();	
+	lastSample = millis();	
 	GetGPSData();
 	GetPressureData();
 	GetIMUData();
@@ -119,10 +117,13 @@ void SendLastData() {
 	SendTimerData();
 	SendAmbientLightData();
 	SendPressureData();
-	SendIMUData();
+	SendIMU0Data();
+	//SendIMU1Data();
 	SendGPSData();
 	SendSDStatus();
+	SendThermistorData();
 }
+
 
 void GetAmbientLightData() {
 	lastLight = analogRead(AMBIENT_LIGHT_PIN);
@@ -153,6 +154,20 @@ void GetIMUData() {
 	lastGyro1Z = IMU2.readFloatGyroZ();
 }
 
+void SendThermistorData() {
+	//t1.readToArray();
+	Wire.beginTransmission(SLAVE_NUMBER);
+	Wire.print(MESSAGE_BEGIN);
+	Wire.print(DATA_MESSAGE);
+	Wire.print(INSTR_SOURCE);
+	Wire.print(TEMPSENSOR);
+	Wire.print((float)t1->read() / 10);
+	Wire.print(DATA_STOP);
+	Wire.print(MESSAGE_STOP);
+	Wire.endTransmission();
+	//Serial.println((float) t1->read() / 10);
+}
+
 void SendSDStatus() {
 	Wire.beginTransmission(SLAVE_NUMBER);
 	Wire.print(MESSAGE_BEGIN);
@@ -177,12 +192,14 @@ void SendTimerData() {
 	Wire.endTransmission();
 }
 
-void SendIMUData() {
+void SendIMU0Data() {
 	Wire.beginTransmission(SLAVE_NUMBER);
 	Wire.print(MESSAGE_BEGIN);
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(ACCELEROMETER);
+	//Wire.print(0);
+	//Wire.print(DATA_STOP);
 	Wire.print(lastAcc0X);
 	Wire.print(DATA_STOP);
 	Wire.print(lastAcc0Y);
@@ -197,6 +214,8 @@ void SendIMUData() {
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(GYROSCOPE);
+	//Wire.print(0);
+	//Wire.print(DATA_STOP);
 	Wire.print(lastGyro0X);
 	Wire.print(DATA_STOP);
 	Wire.print(lastGyro0Y);
@@ -207,7 +226,6 @@ void SendIMUData() {
 
 	Wire.endTransmission();
 }
-
 
 void SendAmbientLightData() {
 	Wire.beginTransmission(SLAVE_NUMBER); // transmit to device #9
