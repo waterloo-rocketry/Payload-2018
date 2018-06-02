@@ -61,9 +61,9 @@ int SelectButtonState = 0;
 LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 //Thermistor
-float therm1 = 0;
-float therm2 = 0;
-float therm3 = 0;
+float GoProTherm = 0;
+float OutsideTherm = 0;
+float InsideTherm = 0;
 
 //Light sensor
 int lightValue = 0;
@@ -117,7 +117,7 @@ void setup() {
 
 	RadioTimer.every(1000, GetMessageFromRadio);
 	RadioTimer.every(1000, UpdateArmedTimer);
-	RadioTimer.every(1500, CheckForConnectivity);
+	RadioTimer.every(5000, CheckForConnectivity);
 	RadioTimer.every(250, []() -> void {blink = !blink; RefreshLCD(); });
 	InitializeSDFile();
 
@@ -163,7 +163,11 @@ void ParseMessage(String data) {
 				startChar = 4;
 				//int thermistorNumber = ParseInt(data, &startChar);
 				//startChar++;
-				therm1 = ParseFloat(data, &startChar);
+				GoProTherm = ParseFloat(data, &startChar);
+				startChar++;
+				OutsideTherm = ParseFloat(data, &startChar);
+				startChar++;
+				InsideTherm = ParseFloat(data, &startChar);
 				RefreshLCD();
 
 				//UpdateThermistorData(thermistorNumber, thermistorData);
@@ -237,6 +241,12 @@ void ParseMessage(String data) {
 				int stateChar = 4;
 				ArmedCountdown = ParseInt(data, &stateChar);
 				lastArmedSample = millis();
+				RefreshLCD();
+			}
+			if (recoveryMessage == ALTIMETER) {
+				int stateChar = 4;
+				AltimeterConnected = ParseInt(data, &stateChar) == 1 ? true : false;
+				RefreshLCD();
 			}
 		}
 	}
@@ -376,7 +386,14 @@ void UpdateState(int newState) {
 }
 
 int ParseInt(String data, int* startChar) {
-	return (int)ParseFloat(data, startChar);
+	String out = "";
+	while (data[*startChar] != DATA_STOP && *startChar < data.length()) {
+		out += data[*startChar];
+		(*startChar)++;
+	}
+	//lcd.print(out);
+	//lcd.print(out.toFloat());
+	return out.toInt();
 }
 
 /*
@@ -396,7 +413,7 @@ float ParseFloat(String data, int* startChar) {
 }
 
 void UpdateArmedTimer() {
-	ArmedCountdown -= (millis() - lastArmedSample);
-	lastArmedSample = millis();
+	//ArmedCountdown -= (millis() - lastArmedSample);
+	//lastArmedSample = millis();
 	RefreshLCD();
 }

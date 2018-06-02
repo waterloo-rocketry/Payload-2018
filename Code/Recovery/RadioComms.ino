@@ -11,6 +11,20 @@ String ReadFromSerial() {
 	return inString;
 }
 
+void ReadFromAltimeter() {
+	String s = "";
+	if (mySerial.available()) {
+		altimeterOn = true;
+	}
+	else altimeterOn = false;
+
+	while (mySerial.available()) {
+		s = mySerial.read();
+	}
+	//if (s)
+	//else altimeterOn = false;
+}
+
 void SendStateDataOverRadio() {
 	Serial.print(MESSAGE_BEGIN);	//Send the current state of the cubesat to the ground
 	Serial.print(DATA_MESSAGE);
@@ -20,12 +34,20 @@ void SendStateDataOverRadio() {
 	Serial.print(DATA_STOP);
 	Serial.print(MESSAGE_STOP);
 
+	Serial.print(MESSAGE_BEGIN);
+	Serial.print(DATA_MESSAGE);
+	Serial.print(RECOVERY_SOURCE);
+	Serial.print(ALTIMETER);
+	Serial.print(altimeterOn ? 1 : 0);
+	Serial.print(DATA_STOP);
+	Serial.print(MESSAGE_STOP);
+
 	if (state == Armed) {
 		Serial.print(MESSAGE_BEGIN);
 		Serial.print(DATA_MESSAGE);
 		Serial.print(RECOVERY_SOURCE);
 		Serial.print(ARMED_TIMER);
-		Serial.print((ArmedTimeout * 60000) - (millis() - ArmedCountdown));
+		Serial.print(((ArmedTimeout * 60000) - (millis() - ArmedCountdown))/60000);
 		Serial.print(DATA_STOP);
 		Serial.print(MESSAGE_STOP);
 	}

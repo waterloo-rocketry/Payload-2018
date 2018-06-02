@@ -45,7 +45,7 @@ void RefreshStatusMode() {
 		lcd.print(ONMESSAGE);
 
 		if (TransponderState == StatusMode) {
-			if (StatusState == ON) {
+			if (StatusState == ON || ArmedState) {
 				lcd.setCursor(11, 1);
 			}
 			else {
@@ -87,9 +87,9 @@ void RefreshArmedMode() {
 
 		if (TransponderState == ArmedMode) {
 			if (ArmedState == ON) {
-				lcd.setCursor(11, 1);
 				lcd.setCursor(0, 1);
-				lcd.print(ArmedCountdown / 60 / 1000);
+				lcd.print(ArmedCountdown);
+				lcd.setCursor(11, 1);
 			}
 			else {
 				lcd.setCursor(11, 0);
@@ -166,11 +166,11 @@ void RefreshTemperatureData() {
 	lcd.setCursor(0, 0);
 	//lcd.print(TEMP0);
 	lcd.print(TEMP1);
-	lcd.print(round(therm1));
+	lcd.print(round(GoProTherm));
 	lcd.setCursor(0, 1);
-	lcd.print(TEMP2);
-	lcd.print(round(therm2));
+	lcd.print(TEMP2); 
+	lcd.print(round(OutsideTherm));
 	lcd.print(" ");
 	lcd.print(TEMP3);
-	lcd.print(round(therm3));
+	lcd.print(round(InsideTherm));
 }

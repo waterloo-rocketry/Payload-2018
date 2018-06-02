@@ -91,7 +91,6 @@
     <ClInclude Include="__vm\.InstrCode.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sensorData.cpp" />
     <ClCompile Include="thermistor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

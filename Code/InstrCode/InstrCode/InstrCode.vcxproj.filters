@@ -15,8 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="InstrCode.ino" />
     <None Include="SDOperations.ino" />
+    <None Include="InstrCode.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.InstrCode.vsarduino.h">
@@ -39,9 +39,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sensorData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="thermistor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

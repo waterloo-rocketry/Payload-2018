@@ -7,6 +7,7 @@
 #include <Wire.h>
 #include <SoftwareSerial.h>
 #include "PinRefs.h"
+#include "SoftwareSerial.h"
 
 enum RecoveryState {
 	Idle,
@@ -18,12 +19,14 @@ RecoveryState state;
 String i2cData = "";
 int ArmedTimeout = 120; //Amount of time in minutes to default to disarmed after arming
 int ArmedCountdown = 0;
+SoftwareSerial mySerial(8, 9);
+bool altimeterOn = false;
 
 void setup() {
 	pinMode(stratSoftSerialPin, INPUT);
 	pinMode(stratRelayPin, OUTPUT);
 	pinMode(instrRelayPin, OUTPUT);
-
+	mySerial.begin(9600);
 	
 	pinMode(LED_BUILTIN, OUTPUT);
 
@@ -32,7 +35,7 @@ void setup() {
 	Wire.onReceive(ReceivedMessage);
 	Serial.begin(9600);
 	state = Idle;
-	SwitchState(1);
+	SwitchState(2);
 }
 
 void ReceivedMessage(int bytes) {
@@ -50,16 +53,18 @@ void loop() {
 
 	if (state == 0) {
 		delay(2500);
+		ReadFromAltimeter();
 		SendStateDataOverRadio();
 	}
 	else if (state == 1) {
 		delay(500);
+		ReadFromAltimeter();
 		SendStateDataOverRadio();
 		SendInstrDataOverRadio();
 	}
 	else if (state == 2) {
 		delay(500);
-
+		ReadFromAltimeter();
 		if (millis() - ArmedCountdown > (ArmedTimeout * 60000)) {
 			SwitchState(0);
 		}

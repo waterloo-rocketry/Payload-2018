@@ -11,8 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_GPS_Library", "C:\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_GPS-master", "C:\Users\paula\OneDrive\Documents\Arduino\libraries\Adafruit_GPS-master\Adafruit_GPS-master.vcxitems", "{C584085E-4561-4D76-B951-C0B2A06CAC99}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "echo", "C:\Users\paula\OneDrive\Documents\Arduino\libraries\Adafruit_GPS-master\examples\echo\echo.vcxproj", "{3861176D-5EDA-45BE-8816-1B63F57C350B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -23,10 +21,6 @@ Global
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
-		{3861176D-5EDA-45BE-8816-1B63F57C350B}.Debug|x86.ActiveCfg = Debug|Win32
-		{3861176D-5EDA-45BE-8816-1B63F57C350B}.Debug|x86.Build.0 = Debug|Win32
-		{3861176D-5EDA-45BE-8816-1B63F57C350B}.Release|x86.ActiveCfg = Release|Win32
-		{3861176D-5EDA-45BE-8816-1B63F57C350B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

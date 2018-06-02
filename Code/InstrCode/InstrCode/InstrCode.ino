@@ -32,7 +32,9 @@ LSM6DS3 IMU2(I2C_MODE, 0x6B);
 static NMEAGPS  gps;
 static gps_fix  fix;
 
-THERMISTOR* t1;
+THERMISTOR* GoProTemp;
+THERMISTOR* OutsideTemp;
+THERMISTOR* InsideTemp;
 
 // Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
 // Set to 'true' if you want to debug and listen to the raw GPS sentences
@@ -68,7 +70,10 @@ float lastGyro1Z = 0;
 void setup() {
 	Serial.begin(9600);
 	
-	t1 = new THERMISTOR(A1, 220, 3560, 220);
+	GoProTemp = new THERMISTOR(A1, 220, 3560, 220);
+	OutsideTemp = new THERMISTOR(A2, 220, 3560, 220);
+	InsideTemp = new THERMISTOR(A3, 220, 3560, 220);
+
 	pinMode(AMBIENT_LIGHT_PIN, INPUT);
 
 	InitializeSDFile();		//Setup SD Card
@@ -161,7 +166,11 @@ void SendThermistorData() {
 	Wire.print(DATA_MESSAGE);
 	Wire.print(INSTR_SOURCE);
 	Wire.print(TEMPSENSOR);
-	Wire.print((float)t1->read() / 10);
+	Wire.print((float)GoProTemp->read() / 10);
+	Wire.print(DATA_STOP);
+	Wire.print((float)OutsideTemp->read() / 10);
+	Wire.print(DATA_STOP);
+	Wire.print((float)InsideTemp->read() / 10);
 	Wire.print(DATA_STOP);
 	Wire.print(MESSAGE_STOP);
 	Wire.endTransmission();

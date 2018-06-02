@@ -16,6 +16,7 @@
 #define TRANSPONDER_SOURCE 'T'
 
 #define ARMED_TIMER 'A'
+#define ALTIMETER 'F'
 
 //Sensor defs
 #define THERMISTOR 'T'
