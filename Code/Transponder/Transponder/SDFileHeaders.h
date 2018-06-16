@@ -23,3 +23,7 @@
 
 #define GPS_LAT_HEADER F("GPS Latitude")
 #define GPS_LONG_HEADER F("GPS Longitude")
+
+#define THERM_1_HEADER F("Outside Temp")
+#define THERM_2_HEADER F("Inside Temp")
+#define THERM_3_HEADER F("GoPro Temp")

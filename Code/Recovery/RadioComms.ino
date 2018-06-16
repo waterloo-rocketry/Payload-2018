@@ -25,6 +25,8 @@ void ReadFromAltimeter() {
 	//else altimeterOn = false;
 }
 
+
+
 void SendStateDataOverRadio() {
 	Serial.print(MESSAGE_BEGIN);	//Send the current state of the cubesat to the ground
 	Serial.print(DATA_MESSAGE);
@@ -41,18 +43,20 @@ void SendStateDataOverRadio() {
 	Serial.print(altimeterOn ? 1 : 0);
 	Serial.print(DATA_STOP);
 	Serial.print(MESSAGE_STOP);
-
-	if (state == Armed) {
-		Serial.print(MESSAGE_BEGIN);
-		Serial.print(DATA_MESSAGE);
-		Serial.print(RECOVERY_SOURCE);
-		Serial.print(ARMED_TIMER);
-		Serial.print(((ArmedTimeout * 60000) - (millis() - ArmedCountdown))/60000);
-		Serial.print(DATA_STOP);
-		Serial.print(MESSAGE_STOP);
-	}
+	Serial.flush();
 }
 
+void SendTimerDataOverRadio() {
+	Serial.print(MESSAGE_BEGIN);
+	Serial.print(DATA_MESSAGE);
+	Serial.print(RECOVERY_SOURCE);
+	Serial.print(ARMED_TIMER);
+	Serial.print(((ArmedTimeout * 60000) - (millis() - ArmedCountdown)) / 60000);
+	Serial.print(DATA_STOP);
+	Serial.print(MESSAGE_STOP);
+	Serial.flush();
+}
+/*
 void SendInstrDataOverRadio() {
 	if (i2cData == "") {
 		Serial.print(MESSAGE_BEGIN);
@@ -65,4 +69,6 @@ void SendInstrDataOverRadio() {
 		Serial.print(i2cData[i]);	//Pass on all data sent from instr board
 	}
 	i2cData = "";	//clear all data from instr board
+	Serial.flush();
 }
+*/

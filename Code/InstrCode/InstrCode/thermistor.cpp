@@ -80,7 +80,7 @@ int THERMISTOR::read(void)
   float average = 0;
 
   analogReference(DEFAULT);
-
+  /*
   // take N samples in a row, with a slight delay
   for (i=0; i< NUMSAMPLES; i++)
   {
@@ -89,10 +89,11 @@ int THERMISTOR::read(void)
     delay(10);
   }
   average /= NUMSAMPLES;
-
+  */
+  average = analogRead(analogPin);
   #ifdef VERBOSE_SENSOR_ENABLED  
-  Serial.print("Average analog reading "); 
-  Serial.println(average);
+  //Serial.print("Average analog reading "); 
+  //Serial.println(average);
   #endif
  
   // convert the value to resistance
@@ -100,8 +101,8 @@ int THERMISTOR::read(void)
   average = serialResistance / average;
 
   #ifdef VERBOSE_SENSOR_ENABLED
-  Serial.print("Thermistor resistance "); 
-  Serial.println(average);
+ // Serial.print("Thermistor resistance "); 
+ // Serial.println(average);
   #endif
  
   float steinhart;
@@ -113,9 +114,9 @@ int THERMISTOR::read(void)
   steinhart -= 273.15;                         // convert to C
  
   #ifdef VERBOSE_SENSOR_ENABLED
-  Serial.print("Temperature "); 
-  Serial.print(steinhart);
-  Serial.println(" *C");
+ // Serial.print("Temperature "); 
+ // Serial.print(steinhart);
+  //Serial.println(" *C");
   #endif
   
   return (int)(steinhart * 10);

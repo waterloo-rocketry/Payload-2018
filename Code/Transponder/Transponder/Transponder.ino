@@ -92,10 +92,10 @@ float velocity;
 float groundLevel = 0;
 
 //GPS
-float gpsLat = 0;
-float gpsLong = 0;
+int32_t gpsLat = 0;
+int32_t gpsLong = 0;
 
-int sampleTime = 0;	//last time data was sampled from the cubesat
+int32_t sampleTime = 0;	//last time data was sampled from the cubesat
 
 int ArmedCountdown = 120 * 60 * 1000;	//Time until it defaults to off in millis
 int lastArmedSample;
@@ -115,9 +115,10 @@ void setup() {
 
 	Serial.begin(9600);
 
-	RadioTimer.every(1000, GetMessageFromRadio);
+	//RadioTimer.every(100, GetMessageFromRadio);
 	RadioTimer.every(1000, UpdateArmedTimer);
 	RadioTimer.every(5000, CheckForConnectivity);
+	//RadioTimer.every(1000, WriteLastDataToSD);
 	RadioTimer.every(250, []() -> void {blink = !blink; RefreshLCD(); });
 	InitializeSDFile();
 
@@ -125,12 +126,15 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	GetMessageFromRadio();
 	CheckForButtonPress();
 	RadioTimer.update();
 
 }
 
 void ParseMessage(String data) {
+	//debugsenddata(data);
+
 	char messageType = data[1];
 	char messageSource = data[2];
 
@@ -152,7 +156,7 @@ void ParseMessage(String data) {
 			int startChar;
 			if (instrMessage == SAMPLE_TIME) {
 				startChar = 4;
-				int newSampleTime = ParseInt(data, &startChar);
+				int32_t newSampleTime = ParseInt(data, &startChar);
 				velocity = altitudeDelta / ((newSampleTime - sampleTime) / 1000);
 				sampleTime = newSampleTime;
 				WriteLastDataToSD();
@@ -216,6 +220,17 @@ void ParseMessage(String data) {
 			}
 			else if (instrMessage == GPSCOORDS) {
 				startChar = 4;
+				GPSFix = ParseInt(data, &startChar) == 1 ? true : false;
+				startChar++;
+				int datapoint = ParseInt(data, &startChar);
+				startChar++;
+				if (datapoint == 0) {
+					gpsLat = ParseInt(data, &startChar);
+				}
+				else if (datapoint == 1) {
+					gpsLong = ParseInt(data, &startChar);
+				}
+				/*
 				float newGPSLat = ParseFloat(data, &startChar);
 				startChar++;
 				float newGPSLong = ParseFloat(data, &startChar);
@@ -228,6 +243,7 @@ void ParseMessage(String data) {
 					gpsLat = newGPSLat;
 					gpsLong = newGPSLong;
 				}
+				*/
 				RefreshLCD();
 			}
 		}
@@ -385,7 +401,7 @@ void UpdateState(int newState) {
 
 }
 
-int ParseInt(String data, int* startChar) {
+int32_t ParseInt(String data, int* startChar) {
 	String out = "";
 	while (data[*startChar] != DATA_STOP && *startChar < data.length()) {
 		out += data[*startChar];

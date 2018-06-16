@@ -44,6 +44,12 @@ void InitializeSDFile() {
 	dataFile.print(GPS_LAT_HEADER);
 	dataFile.print(comma);
 	dataFile.print(GPS_LONG_HEADER);
+	dataFile.print(comma);
+	dataFile.print(THERM_3_HEADER);
+	dataFile.print(comma);
+	dataFile.print(THERM_2_HEADER);
+	dataFile.print(comma);
+	dataFile.print(THERM_1_HEADER);
 	dataFile.print("\n");
 	dataFile.close();
 }
@@ -90,9 +96,15 @@ void WriteLastDataToSD() {
 	data.print(comma);
 	data.print(lastGyro1Z);
 	data.print(comma);
-	data.print(fix.latitude());
+	data.print(lastValidLat);
 	data.print(comma);
-	data.print(fix.longitude());
+	data.print(lastValidLong);
+	data.print(comma);
+	data.print(GoProTempReading);
+	data.print(comma);
+	data.print(OutsideTempReading);
+	data.print(comma);
+	data.print(InsideTempReading);
 	data.print("\n");
 	data.close();
 }

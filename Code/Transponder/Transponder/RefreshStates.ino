@@ -152,12 +152,10 @@ void RefreshGPSData() {
 	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(GPS);
-	lcd.setCursor(11, 0);
-	lcd.print(GPSFIX);
-	lcd.print(GPSFix ? "Y" : "N");
-	lcd.setCursor(0, 1);
 	lcd.print(gpsLat);
-	lcd.print(" ");
+	lcd.setCursor(0, 1);
+	lcd.print(GPSFIX);
+	lcd.print(GPSFix ? "Y " : "N ");
 	lcd.print(gpsLong);
 }
 

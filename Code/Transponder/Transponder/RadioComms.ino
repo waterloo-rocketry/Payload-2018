@@ -1,15 +1,27 @@
 #include "RadioMessages.h"
 
+#define SERIAL_BUFFER_SIZE 1024
+
 String ReadFromSerial() {
 	String inString = "";
 	char inChar;
-	do {
-		if (!Serial.available()) return "";
+	while (Serial.available()) {
 		inChar = (char)Serial.read();
-		if (inChar != MESSAGE_STOP && (inChar == MESSAGE_BEGIN || inString != "")) inString += inChar; //search for message begin
-	} while (inChar != MESSAGE_STOP);
+		if (inChar == MESSAGE_BEGIN) {
+			inString += inChar;
+			break;
+		}
+	}
+	while (Serial.available()) {
+		inChar = (char)Serial.read();
+		if (inChar == MESSAGE_STOP) {
+			//debugsenddata(inString);
+			return inString;
+		}
+		else inString += inChar;
+	}
 
-	return inString;
+	return "";
 }
 
 void SendNewState() {
@@ -42,10 +54,12 @@ void GetMessageFromRadio() {
 				RefreshLCD();
 			}
 			ParseMessage(message);
-			
 		}
 	}
-	WriteLastDataToSD();
+	delay(100);
+	//WriteLastDataToSD();
+	Serial.flush();
+	
 }
 
 void CheckForConnectivity() {

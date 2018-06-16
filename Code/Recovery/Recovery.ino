@@ -8,6 +8,7 @@
 #include <SoftwareSerial.h>
 #include "PinRefs.h"
 #include "SoftwareSerial.h"
+#include "Timer.h"
 
 enum RecoveryState {
 	Idle,
@@ -18,16 +19,17 @@ enum RecoveryState {
 RecoveryState state;
 String i2cData = "";
 int ArmedTimeout = 120; //Amount of time in minutes to default to disarmed after arming
-int ArmedCountdown = 0;
+long ArmedCountdown = 0;
 SoftwareSerial mySerial(8, 9);
 bool altimeterOn = false;
+Timer UpdateTimer;		//Time data transmission to the ground
 
 void setup() {
 	pinMode(stratSoftSerialPin, INPUT);
 	pinMode(stratRelayPin, OUTPUT);
 	pinMode(instrRelayPin, OUTPUT);
 	mySerial.begin(9600);
-	
+
 	pinMode(LED_BUILTIN, OUTPUT);
 
 	// initialize serial and wire:
@@ -35,47 +37,71 @@ void setup() {
 	Wire.onReceive(ReceivedMessage);
 	Serial.begin(9600);
 	state = Idle;
-	SwitchState(2);
+	SwitchState(0);
+
+	UpdateTimer.every(2500, UpdateLowPower);
+	UpdateTimer.every(1000, UpdateActive);
+	UpdateTimer.every(1000, UpdateArmed);
+
 }
 
 void ReceivedMessage(int bytes) {
+	String s = "";
 	while (Wire.available())
 	{
-		i2cData += (char)Wire.read();
+		//s += (char)Wire.read();
+		Serial.print( (char)Wire.read());
 	}
+	//delay(50);
 }
 
 void loop() {
+	UpdateTimer.update();
 	
+}
+
+void UpdateLowPower() {
+	if (state != 0) return;
+
 	String xbeeData = ReadFromSerial();
 	if (xbeeData != "")
 		ParseMessage(xbeeData);
 
-	if (state == 0) {
-		delay(2500);
-		ReadFromAltimeter();
-		SendStateDataOverRadio();
-	}
-	else if (state == 1) {
-		delay(500);
-		ReadFromAltimeter();
-		SendStateDataOverRadio();
-		SendInstrDataOverRadio();
-	}
-	else if (state == 2) {
-		delay(500);
-		ReadFromAltimeter();
-		if (millis() - ArmedCountdown > (ArmedTimeout * 60000)) {
-			SwitchState(0);
-		}
 
-		SendStateDataOverRadio();
-		SendInstrDataOverRadio();
+	ReadFromAltimeter();
+	SendStateDataOverRadio();
+
+}
+void UpdateActive() {
+	if (state != 1) return;
+
+	String xbeeData = ReadFromSerial();
+	if (xbeeData != "")
+		ParseMessage(xbeeData);
+
+	ReadFromAltimeter();
+	SendStateDataOverRadio();
+	//SendInstrDataOverRadio();
+}
+void UpdateArmed() {
+	if (state != 2) return;
+
+	String xbeeData = ReadFromSerial();
+	if (xbeeData != "")
+		ParseMessage(xbeeData);
+
+	if (long(((ArmedTimeout * 60000) - (millis() - ArmedCountdown)) / 60000) == 0) {
+		SwitchState(0);
 	}
+
+	ReadFromAltimeter();
+	SendStateDataOverRadio();
+	//SendInstrDataOverRadio();
+	SendTimerDataOverRadio();
 }
 
 void SwitchState(int stateNumber) {
-	
+
 	switch (stateNumber) {
 	case 0:
 		state = Idle;

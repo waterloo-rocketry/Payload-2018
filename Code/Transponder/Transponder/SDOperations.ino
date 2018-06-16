@@ -15,17 +15,11 @@ void InitializeSDFile() {
 	dataFile.print(PRESSURE_TEMP_HEADER);
 	dataFile.print(comma);
 
-	dataFile.print(ACC_0_X_HEADER);
+	dataFile.print(THERM_1_HEADER);
 	dataFile.print(comma);
-	dataFile.print(ACC_0_Y_HEADER);
+	dataFile.print(THERM_2_HEADER);
 	dataFile.print(comma);
-	dataFile.print(ACC_0_Z_HEADER);
-	dataFile.print(comma);
-	dataFile.print(GYRO_0_X_HEADER);
-	dataFile.print(comma);
-	dataFile.print(GYRO_0_Y_HEADER);
-	dataFile.print(comma);
-	dataFile.print(GYRO_0_Z_HEADER);
+	dataFile.print(THERM_3_HEADER);
 	dataFile.print(comma);
 
 	dataFile.print(GPS_LAT_HEADER);
@@ -53,21 +47,21 @@ void WriteLastDataToSD() {
 	data.print(comma);
 	data.print(presTempData);
 	data.print(comma);
-	data.print(acc0DataX);
+	data.print(OutsideTherm);
 	data.print(comma);
-	data.print(acc0DataY);
+	data.print(InsideTherm);
 	data.print(comma);
-	data.print(acc0DataZ);
-	data.print(comma);
-	data.print(gyro0DataX);
-	data.print(comma);
-	data.print(gyro0DataY);
-	data.print(comma);
-	data.print(gyro0DataZ);
+	data.print(GoProTherm);
 	data.print(comma);
 	data.print(gpsLat);
 	data.print(comma);
 	data.print(gpsLong);
 	data.print("\n");
 	data.close();
+}
+
+void debugsenddata(String data) {
+	File file = SD.open("Flight Data.csv", FILE_WRITE);
+	file.println(data);
+	file.close();
 }
